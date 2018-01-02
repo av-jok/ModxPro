@@ -1,0 +1,233 @@
+.grid-panel {
+  .table-wrapper {
+    overflow: auto;
+  }
+  .table {
+    margin-bottom: 0;
+    &.table-striped > tbody > tr:nth-of-type(odd) {
+      background-color: #f9f9f9;
+    }
+    tbody {
+      min-height: 200px;
+      /*
+      tr:first-child td {
+        padding: 7px 10px;
+      }
+      */
+    }
+    th {
+      //font-size: 1.1em;
+      text-align: left;
+      border-top: none;
+      border-bottom-color: $link-color;
+      white-space: nowrap;
+      &.sortable {
+        cursor: pointer;
+        svg {
+          margin-left: 10px;
+        }
+        &::after {
+          display: none;
+          content: "\f160";
+          font-size: 12px;
+        }
+        &:hover {
+          &::after {
+            color: $link-color;
+          }
+        }
+      }
+      &.asc::after {
+        font-family: "Font Awesome 5 Regular";
+        content: "\f161";
+        color: $link-color;
+      }
+      &.desc::after {
+        font-family: "Font Awesome 5 Regular";
+        content: "\f160";
+        color: $link-color;
+      }
+    }
+    td.empty {
+      padding: 40px;
+      text-align: center;
+      color: #555;
+      border-bottom: 2px solid #efefef;
+    }
+    tr.inactive {
+      td:not(.actions) {
+        opacity: .5;
+      }
+    }
+  }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    .form-group {
+      margin-bottom: 0;
+    }
+    .search {
+      width: 220px;
+      .form-group {
+        //padding: 4px 0 3px 0;
+        border-bottom: 2px solid #999;
+        display: flex;
+        input, button {
+          border: none;
+          background: transparent;
+          padding: 0;
+        }
+        input[type="text"] {
+          width: 100%;
+          padding-right: 10px;
+        }
+        button {
+          font-size: 18px;
+          color: #777;
+          cursor: pointer;
+          margin-left: 8px;
+          &[type="reset"] {
+            &[disabled] {
+              display: none;
+            }
+          }
+        }
+        &.active, &:hover {
+          border-bottom-color: $link-color;
+          button {
+            color: $link-color;
+          }
+        }
+      }
+    }
+    &.top-bar {
+      margin-bottom: 20px;
+    }
+    &.bottom-bar {
+      opacity: 0;
+      padding-top: 10px;
+      border-top: 1px solid $link-color;
+      input[type="number"] {
+        width: 70px;
+        border: 1px solid $border-color;
+        border-radius: .25rem;
+        text-align: right;
+        padding: 5px;
+      }
+    }
+  }
+  .spinner {
+    text-align: center;
+    .fa-spin {
+      font-size: 2em;
+      line-height: 2em;
+    }
+  }
+  .actions {
+    display: flex;
+    .btn {
+      font-size: 12px;
+      padding: 2px 8px;
+      line-height: 20px;
+      height: inherit;
+      border-width: 1px;
+      &:not(:first-child) {
+        margin-left: 5px;
+      }
+      &.direct {
+        display: none;
+      }
+    }
+    .btn-group {
+      margin-left: 5px;
+    }
+    .dropdown-menu {
+      left: auto;
+      right: 0;
+      z-index: 10000;
+      .dropdown-item {
+        padding: 0;
+      }
+      a {
+        font-size: 13px;
+        display: block;
+        border: none;
+        padding: 3px 10px 3px 5px;
+        color: $gray-dark;
+        &.border {
+          border-top: 1px solid #ddd;
+        }
+      }
+      .fa {
+        width: 20px;
+        text-align: center;
+      }
+    }
+  }
+
+  @include media-breakpoint-down(md) {
+    .toolbar {
+      .limit-wrapper {
+        display: none;
+      }
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    .toolbar {
+      justify-content: space-around;
+      & > div {
+        width: 100%;
+        text-align: center;
+      }
+      .right, .middle {
+        margin-top: 10px;
+      }
+    }
+    .reload-wrapper, .page-wrapper {
+      display: none;
+    }
+  }
+}
+
+#app-grid-users {
+  .toolbar {
+    margin-bottom: 50px;
+  }
+  .search {
+    width: 100%;
+  }
+  table {
+    .idx { width: 5%; }
+    .topics, .comments, .rating { width: 15%; }
+
+    tr.user {
+      &.positive {
+        .rating { color: $green; }
+      }
+      &.negative {
+        .rating { color: $red; }
+      }
+    }
+    td {
+      vertical-align: middle;
+      &.user {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        .avatar {
+          padding-right: 10px;
+          img {
+            width: 48px;
+            border-radius: 3px;
+          }
+        }
+        .properties {
+          font-size: .8rem;
+          .name { font-size: 1rem; }
+        }
+      }
+    }
+  }
+}

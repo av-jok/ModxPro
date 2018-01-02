@@ -1,0 +1,35 @@
+@mixin social-icons {
+  margin-left: auto;
+  a {
+    width: 16px;
+    font-size: 16px;
+    text-align: center;
+    margin-left: 17px;
+    &:first-child {
+      margin-left: 0;
+    }
+    //line-height: 35px;
+    text-decoration: none;
+    display: inline-block;
+    &:hover {
+      text-decoration: none;
+      opacity: .6;
+    }
+    .fa-slack {
+      color: #2d333a;
+    }
+    .fa-twitter {
+      color: #07aff0;
+    }
+    .fa-facebook-f {
+      color: #4467ba;
+    }
+    .fa-vk {
+      color: #628ecb;
+    }
+    .fa-telegram {
+      color: #30a7de;
+    }
+  }
+  @content;
+}

@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "scripts": {
+    "prod": "gulp --production",
+    "dev": "gulp watch"
+  },
+  "dependencies": {
+    "alertifyjs": "1.*",
+    "backbone": "1.*",
+    "backbone.epoxy": "1.*",
+    "backbone.syphon": "0.*",
+    "bootstrap": "4.0.0-beta.2",
+    "fancybox": "3.*",
+    "font-awesome": "git@github.com:FortAwesome/Font-Awesome-Pro.git#5.0.2",
+    "jquery": "3.*",
+    "js-cookie": "2.*",
+    "markitup": "3.0.0-0",
+    "moment": "2.*",
+    "numeral": "2.*",
+    "prismjs": "1.*",
+    "requirejs": "2.*"
+  },
+  "devDependencies": {
+    "gulp-chmod": "2.*",
+    "gulp-clean-css": "3.*",
+    "gulp-rename": "1.*",
+    "gulp-sass": "3.*",
+    "gulp-uglify": "2.*",
+    "gulp-concat": "2.*"
+  }
+}

@@ -1,0 +1,22 @@
+$grid-breakpoints: (
+        xs: 0,
+        sm: 321px,
+        md: 768px,
+        lg: 1024px,
+        xl: 1280px
+) !default;
+
+$container-max-widths: (
+        sm: 100%,
+        md: 100%,
+        lg: 100%,
+        xl: 1230px
+) !default;
+
+$primary: #369 !default;
+$gray-dark: #293034 !default;
+$link-color: #369 !default;
+
+$font-family-sans-serif: sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-family-monospace: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+$font-family-base: $font-family-sans-serif !default;
