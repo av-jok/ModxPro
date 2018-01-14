@@ -1,0 +1,80 @@
+.user-header {
+  @include media-breakpoint-up(md) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  @include media-breakpoint-down(sm) {
+    text-align: center;
+  }
+  &.blocked {
+    .name {
+      //text-decoration: line-through;
+      color: #999;
+    }
+  }
+  .avatar {
+    img {
+      width: 64px;
+      height: 64px;
+      border-radius: 5px;
+    }
+  }
+  .name {
+    h1 { font-size: 1.6em; }
+  }
+  .message {
+    .btn {
+      max-width: 200px;
+      white-space: normal;
+    }
+  }
+}
+
+.user-tabs {
+  padding-top: 20px;
+  .nav-tabs {
+    flex-wrap: wrap;
+    @include media-breakpoint-down(sm) {
+      justify-content: space-around;
+      margin: 0 10px;
+      padding: 0 0 10px 0;
+      .nav-link {
+        border-radius: .25rem;
+        &.active {
+          border-bottom-color: #ddd;
+        }
+      }
+    }
+  }
+}
+
+.user-content {
+  padding-top: 20px;
+  table {
+    width: 100%;
+    th { font-weight: normal;}
+    th, td {
+      width: 50%;
+      font-size: 13px;
+      padding: 5px 0;
+    }
+  }
+  .comment {
+    //margin-top: 10px;
+    //border-top: 1px solid $border-color;
+    & > p {
+      padding: 5px 0;
+    }
+  }
+}
+
+.user-message {
+  .alert {
+    padding: .5rem 1rem;
+    font-size: 12px;
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

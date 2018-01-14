@@ -1,6 +1,6 @@
 <?php
 
-$_lang['area_modxpro_main'] = 'Основные';
+$_lang['area_app_main'] = 'Основные';
 
-$_lang['setting_modxpro_some_setting'] = 'Какая-то настройка';
-$_lang['setting_modxpro_some_setting_desc'] = 'Это описание для какой-то настройки';
+$_lang['setting_app_mail_queue'] = 'Включить очередь отправки почты';
+$_lang['setting_app_mail_queue_desc'] = '';

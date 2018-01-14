@@ -1,0 +1,23 @@
+.buttons {
+  margin-top: 20px;
+  justify-content: space-between;
+  @media (min-width: 601px) {
+    display: flex;
+    align-items: center;
+    .btn {
+      margin-right: 10px;
+      &:last-child { margin-right: 0; }
+    }
+  }
+  @media (max-width: 600px) {
+    .btn {
+      width: 100%;
+      margin-top: 10px;
+      &:first-child { margin-top: 0; }
+    }
+  }
+  .btn {
+    font-size: 16px;
+    vertical-align: middle;
+  }
+}

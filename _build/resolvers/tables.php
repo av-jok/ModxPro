@@ -111,12 +111,14 @@ if ($transport->xpdo) {
         $c->execute();
         $found = false;
         while ($row = $c->fetch(PDO::FETCH_ASSOC)) {
-            if ($row['Field'] == 'work') {
+            if (in_array($row['Field'], ['work', 'feedback', 'usename'])) {
                 $found = true;
                 break;
             }
         }
         if (!$found) {
+            $manager->addField('modUserProfile', 'feedback');
+            $manager->addField('modUserProfile', 'usename');
             $manager->addField('modUserProfile', 'work');
             $manager->addIndex('modUserProfile', 'work');
         }

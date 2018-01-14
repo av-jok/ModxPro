@@ -40,6 +40,10 @@ $packages = [
         'version' => '1.8.1-pl',
         'service_url' => 'modstore.pro',
     ],
+    'DateAgo' => [
+        'version' => '1.0.4-pl',
+        'service_url' => 'modstore.pro',
+    ],
 ];
 
 $downloadPackage = function ($src, $dst) {

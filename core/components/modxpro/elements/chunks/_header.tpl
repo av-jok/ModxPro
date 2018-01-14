@@ -2,8 +2,7 @@
     <div class="service-panel">
         <div class="container">
             <ul class="links">
-                <li><a href="{$.en ? 'https://en.modstore.pro' : 'https://modstore.pro'}" target="_top">Modstore</a>
-                </li>
+                <li><a href="{$.en ? 'https://en.modstore.pro' : 'https://modstore.pro'}" target="_top">Modstore</a></li>
                 <li><a href="{$.en ? 'https://en.modhost.pro' : 'https://modhost.pro'}" target="_top">Modhost</a></li>
                 <li><a href="{$.en ? 'https://docs.modx.pro/en/' : 'https://docs.modx.pro'}" target="_top">Docs</a></li>
                 <li><strong>MODX.Pro</strong></li>
@@ -29,7 +28,7 @@
         </div>
     </div>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="{'site_url' | config}">
                 <img src="/assets/components/modxpro/img/logo.png"
@@ -49,7 +48,7 @@
                         'outerTpl' => '@INLINE {{+wrapper}}',
                         'tpl' => '@INLINE <li{{+classes}}><a href="/{{+link}}" class="nav-link">{{+menutitle}}</a></li>'
                     ]}
-                    <li class="ml-md-auto languages nav-item">
+                    <li class="ml-0 ml-md-auto languages nav-item">
                         {if $.en}
                             <a href="{$.switch_link}" class="language nav-link ru">
                                 <img src="/assets/components/modxpro/img/lang-ru.png" srcset="/assets/components/modxpro/img/lang-ru@2x.png 2x">

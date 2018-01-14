@@ -51,4 +51,12 @@ return [
         'area' => 'mse2_main',
         'namespace' => 'msearch2',
     ],
+
+    'app_mail_queue' => [
+        'key' => 'app_mail_queue',
+        'xtype' => 'combo-boolean',
+        'value' => false,
+        'area' => 'app_main',
+        'namespace' => 'modxpro',
+    ],
 ];

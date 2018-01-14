@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model package="modxpro" baseClass="xPDOObject" platform="mysql" defaultEngine="InnoDB" phpdoc-package="modxpro" version="1.1">
-    <!--
-    <object class="ModxProItem" table="modxpro_item" extends="xPDOSimpleObject">
-        <field key="name" dbtype="varchar" precision="100" phptype="string" null="false" default=""/>
-        <field key="description" dbtype="text" phptype="text" null="true" default=""/>
-        <field key="active" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="1"/>
+<model package="modxpro" baseClass="xPDOObject" platform="mysql" defaultEngine="InnoDB" phpdoc-package="modxpro"
+       version="1.1">
 
-        <index alias="name" name="name" primary="false" unique="false" type="BTREE">
-            <column key="name" length="" collation="A" null="false"/>
+    <object class="appMailQueue" table="app_mail_queues" extends="xPDOSimpleObject">
+        <field key="to" dbtype="varchar" precision="255" phptype="string" null="false"/>
+        <field key="subject" dbtype="varchar" precision="255" phptype="string" null="false"/>
+        <field key="body" dbtype="text" phptype="string" null="true" default=""/>
+        <field key="properties" dbtype="text" phptype="json" null="true" default="[]"/>
+        <field key="createdon" dbtype="timestamp" phptype="timestamp" null="false" default="CURRENT_TIMESTAMP"/>
+
+        <index alias="to" name="to" primary="false" unique="false" type="BTREE">
+            <column key="to" length="" collation="A" null="false"/>
         </index>
-        <index alias="active" name="active" primary="false" unique="false" type="BTREE">
-            <column key="active" length="" collation="A" null="false"/>
+        <index alias="createdon" name="createdon" primary="false" unique="false" type="BTREE">
+            <column key="createdon" length="" collation="A" null="false"/>
         </index>
     </object>
-    -->
+
+    <object class="appUserName" table="app_user_names" extends="xPDOObject">
+        <field key="username" dbtype="varchar" precision="100" phptype="string" null="false"/>
+        <field key="userid" dbtype="int" precision="10" phptype="int" null="false"/>
+        <field key="createdon" dbtype="timestamp" phptype="timestamp" null="false" default="CURRENT_TIMESTAMP"/>
+
+        <index alias="PRIMARY" name="PRIMARY" primary="true" unique="false" type="BTREE">
+            <column key="username" length="" collation="A" null="false"/>
+        </index>
+        <index alias="userid" name="userid" primary="false" unique="false" type="BTREE">
+            <column key="userid" length="" collation="A" null="false"/>
+        </index>
+    </object>
 
 </model>

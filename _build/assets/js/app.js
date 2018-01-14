@@ -5,7 +5,9 @@ define('app', [
 
     /**
      * @module app
+     * @property Router
      * @property Users
+     * @property User
      */
     var App = {
         action_url: '/assets/components/modxpro/action.php',
@@ -115,7 +117,7 @@ define('app', [
         },
 
         Modal: {
-            id: 'office-modal',
+            id: 'modal',
             isOpen: function () {
                 var $modal = $('#' + this.id);
                 return $modal.hasClass('show');
@@ -245,7 +247,7 @@ define('app', [
 
             });
             Alertify.defaults.maintainFocus = false;
-            /*
+
             var Router = Backbone.Router.extend({
                 routes: {},
                 old_browser: !(typeof window.history.replaceState === 'function'),
@@ -261,6 +263,7 @@ define('app', [
                 Backbone.history.start({root: document.location.pathname});
             });
 
+
             // Modal
             $('[data-toggle="tooltip"]').tooltip();
             $(document).on('hide.bs.modal', function () {
@@ -271,7 +274,7 @@ define('app', [
             }).on('shown.bs.tab', function () {
                 $(this).find('.tab-pane:visible').find('input:visible:first').focus();
             });
-
+            /*
             // Tabs
             $(document).on('shown.bs.tab', function (e) {
                 var $link = $(e.target);
@@ -297,7 +300,7 @@ define('app', [
 
                 $(document).trigger('dropdown-select', [$this.attr('value'), $parent]);
             });
-
+            */
             // Forms
             $(document).on('submit', 'form.ajax-form', function (e) {
                 e.preventDefault();
@@ -312,7 +315,7 @@ define('app', [
                     $form.find('input:visible:first').focus();
                 }, $form);
             });
-            */
+
             // Links
             $(document).on('click', 'a.language', function (e) {
                 e.preventDefault();

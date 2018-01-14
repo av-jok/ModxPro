@@ -8,11 +8,11 @@ class App
     public $pdoTools;
     public $config = [];
 
-    const assets_version = '1.04-dev';
+    const assets_version = '1.05-dev';
 
 
     /**
-     * @param modX $modx
+     * @param modX $this ->modx
      * @param array $config
      */
     function __construct(modX &$modx, array $config = [])
@@ -47,9 +47,14 @@ class App
 
         $this->updateModel();
 
-        //$this->modx->addPackage('modxpro', $this->config['modelPath']);
+        $this->modx->addPackage('modxpro', $this->config['modelPath']);
         /** @noinspection PhpIncludeInspection */
-        //require_once $this->config['corePath'] . 'vendor/autoload.php';
+        require_once $this->config['corePath'] . 'vendor/autoload.php';
+
+        $this->modx->getService('mail', 'AppMail', $this->config['modelPath']);
+        $this->modx->lexicon->load('modxpro:default');
+        $this->modx->lexicon->load('ru:modxpro:frontend');
+        $this->modx->lexicon->load('en:modxpro:frontend');
     }
 
 
@@ -117,57 +122,102 @@ class App
 
                     return $avatar;
                 });
+
+                $fenom->addModifier('website', function ($input, $options = 'www.') {
+                    if (!$url = parse_url($input)) {
+                        return $input;
+                    }
+                    $output = $url['host'];
+                    if (!empty($options)) {
+                        $remove = array_map('trim', explode(',', $options));
+                        $output = str_replace($remove, '', $output);
+                    }
+
+                    return strtolower($output);
+                });
+
+                $fenom->addModifier('prism', function ($input) {
+                    /** @noinspection HtmlUnknownAttribute */
+                    preg_match_all('#(?:<pre><code>|<pre class\="prettyprint">)(.*?)(?:</code></pre>|</pre>)#s', $input, $code);
+                    foreach ($code[0] as $idx => $from) {
+                        // html, css, javascript
+                        $lang = 'markup';
+                        $content = htmlspecialchars_decode($from);
+                        if (strpos($content, '<?') !== false || strpos($content, '->') !== false) {
+                            $lang = 'php';
+                        } elseif (preg_match('#=`\w+`#s', $input) || preg_match('#\[\[#s', $input)) {
+                            //$lang = 'modx';
+                        } elseif (preg_match('#\s(select|from|update|table|insert|into)\s#is', $input)) {
+                            $lang = 'sql';
+                        } elseif (preg_match('#\b(location|include|server)\b#s', $input)) {
+                            $lang = 'nginx';
+                        } elseif (preg_match('#{(\w|\'|\"\$)#s', $input)) {
+                            $lang = 'smarty';
+                        }
+                        $input = str_replace(
+                            $from,
+                            '<pre><code class="language-' . $lang . '">' . trim($code[1][$idx]) . '</code></pre>',
+                            $input
+                        );
+                    }
+
+                    return $input;
+                });
                 break;
 
             case 'OnHandleRequest':
-                if ($this->modx->context->key == 'mgr') {
-                    return;
-                }
-
-                // Remove slash and question signs at the end of url
-                $uri = $_SERVER['REQUEST_URI'];
-                if ($uri != '/' && in_array(substr($uri, -1), ['/', '?'])) {
-                    $this->modx->sendRedirect(rtrim($uri, '/?'), ['responseCode' => 'HTTP/1.1 301 Moved Permanently']);
-                }
-
-                // Remove .html extension
-                if (preg_match('#\.html$#i', $uri)) {
-                    $this->modx->sendRedirect(preg_replace('#\.html$#i', '', $uri),
-                        ['responseCode' => 'HTTP/1.1 301 Moved Permanently']
-                    );
-                }
-
-                if (strpos($_SERVER['HTTP_HOST'], 'en.') === 0) {
-                    $this->modx->switchContext('en');
-                }
-                // Switch context - uncomment it if you have more than one context
-                /*
-                $c = $this->modx->newQuery('modContextSetting', [
-                    'key' => 'http_host',
-                    'value' => $_SERVER['HTTP_HOST'],
-                ]);
-                $c->select('context_key');
-                $tstart = microtime(true);
-                if ($c->prepare() && $c->stmt->execute()) {
-                    $this->modx->queryTime += microtime(true) - $tstart;
-                    $this->modx->executedQueries++;
-                    if ($context = $c->stmt->fetch(PDO::FETCH_COLUMN)) {
-                        if ($context != 'web') {
-                            $this->modx->switchContext($context);
-                        }
+                if ($this->modx->context->key != 'mgr') {
+                    /** @var AppRouter $router */
+                    if ($router = $this->modx->getService('AppRouter', 'AppRouter', $this->config['modelPath'])) {
+                        $router->process();
                     }
                 }
-                */
                 break;
+
             case 'OnLoadWebDocument':
                 break;
+
             case 'OnPageNotFound':
                 break;
+
             case 'OnWebPagePrerender':
                 // Compress output html for Google
-                // $this->modx->resource->_output = preg_replace('#\s+#', ' ', $this->modx->resource->_output);
+                $this->modx->resource->_output = preg_replace('#\s+#', ' ', $this->modx->resource->_output);
                 break;
         }
+    }
+
+
+    /**
+     * @param $to
+     * @param $subject
+     * @param string $body
+     * @param array $properties
+     *
+     * @return bool
+     */
+    public function sendEmail($to, $subject, $body = '', array $properties = [])
+    {
+        if (is_numeric($to)) {
+            /** @var modUserProfile $profile */
+            if ($profile = $this->modx->getObject('modUserProfile', ['internalKey' => $to])) {
+                $to = $profile->email;
+            } else {
+                return false;
+            }
+        }
+        /** @var appMailQueue $queue */
+        $queue = $this->modx->newObject('appMailQueue', [
+                'to' => $to,
+                'subject' => $subject,
+                'body' => $body,
+                'properties' => $properties,
+            ]
+        );
+
+        return $this->modx->getOption('app_mail_queue', null, false)
+            ? $queue->save()
+            : $queue->send();
     }
 
 
@@ -177,7 +227,11 @@ class App
     protected function updateModel()
     {
         if ($this->modx->loadClass('modUserProfile')) {
+            $this->modx->map['modUserProfile']['fields']['feedback'] =
+            $this->modx->map['modUserProfile']['fields']['usename'] =
             $this->modx->map['modUserProfile']['fields']['work'] = false;
+            $this->modx->map['modUserProfile']['fieldMeta']['feedback'] =
+            $this->modx->map['modUserProfile']['fieldMeta']['usename'] =
             $this->modx->map['modUserProfile']['fieldMeta']['work'] = [
                 'dbtype' => 'tinyint',
                 'precision' => 1,
@@ -190,13 +244,7 @@ class App
                 'primary' => false,
                 'unique' => false,
                 'type' => 'BTREE',
-                'columns' => [
-                    'work' => [
-                        'length' => '',
-                        'collation' => 'A',
-                        'null' => false,
-                    ],
-                ],
+                'columns' => ['work' => ['length' => '', 'collation' => 'A', 'null' => false]],
             ];
         }
     }

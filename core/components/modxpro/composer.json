@@ -1,0 +1,6 @@
+{
+    "require": {
+        "nikic/fast-route": "^1.2",
+        "pelago/emogrifier": "^2.0"
+    }
+}

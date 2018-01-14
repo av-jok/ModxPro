@@ -106,6 +106,7 @@ return [
         ],
         'users' => [
             'pagetitle' => 'Пользователи',
+            'cacheable' => false,
         ],
         'chat' => [
             'pagetitle' => 'Чат',
@@ -134,7 +135,7 @@ return [
                     'uri' => '403',
                 ],
                 '404' => [
-                    'pagetitle' => '404 - Документ не найден',
+                    'pagetitle' => '404 - Страница не найдена',
                     'hidemenu' => true,
                     'uri' => '404',
                 ],
@@ -270,6 +271,7 @@ return [
         ],
         'users' => [
             'pagetitle' => 'Users',
+            'cacheable' => false,
         ],
         'chat' => [
             'pagetitle' => 'Chat',

@@ -11,6 +11,7 @@ if ($transport->xpdo) {
         'forbidden_page' => '403',
         'error_page' => '404',
         'service_id' => 'service',
+        'users_id' => 'users',
     ];
 
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {

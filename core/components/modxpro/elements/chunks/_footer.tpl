@@ -3,10 +3,10 @@
         <small>
             total time: [^t^]<br>
             queries: [^q^] ([^qt^])<br>
-            <!--memory: [^m^]-->
+            memory: [^m^]
         </small>
         <div class="ml-auto">
-            &copy; {'site_name' | config}, {'' | date : 'Y'}
+            <i class="far fa-copyright"></i> {'site_name' | config}, 2012 - {'' | date : 'Y'}
         </div>
     </div>
 </footer>

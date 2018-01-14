@@ -14,8 +14,7 @@
 </div>
 
 <div class="container">
-    {'@FILE snippets/hello.php' | snippet}
-    <hr>
+
 </div>
 
 <div class="container">

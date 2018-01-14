@@ -48,10 +48,10 @@
     <td class="idx"><%=idx%>.</td>
     <td class="user">
         <div class="avatar">
-            <img src="<%=avatar%>" height="48">
+            <a href="/users/<%=link%>"><img src="<%=avatar%>" height="48"></a>
         </div>
         <div class="properties">
-            <div class="name"><%=name%></div>
+            <div class="name"><a href="/users/<%=link%>"><%=name%></a></div>
             <div class="createdon">{$.en ? 'Registration' : 'Регистрация'}: <% print(createdon ? createdon : '{$.en ? 'No' : 'Нет'}') %></div>
             <div class="visitedon">{$.en ? 'Activity' : 'Активность'}: <% print(visitedon ? visitedon : '{$.en ? 'No' : 'Нет'}') %></div>
             <div class="work">{$.en ? 'Accepts orders' : 'Принимает заказы'}:

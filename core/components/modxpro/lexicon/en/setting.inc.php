@@ -1,6 +1,6 @@
 <?php
 
-$_lang['area_modxpro_main'] = 'Main';
+$_lang['area_app_main'] = 'Main';
 
-$_lang['setting_modxpro_some_setting'] = 'Some setting';
-$_lang['setting_modxpro_some_setting_desc'] = 'This is description for some setting';
+$_lang['setting_app_mail_queue'] = 'Enable mail queue';
+$_lang['setting_app_mail_queue_desc'] = '';

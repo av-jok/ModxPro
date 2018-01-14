@@ -18,6 +18,7 @@ class UserGetListProcessor extends AppGetListProcessor
     protected $_idx = 0;
     protected $_max_limit = 20;
 
+
     /**
      * @return bool
      */
@@ -48,8 +49,8 @@ class UserGetListProcessor extends AppGetListProcessor
         $c->innerJoin('TicketAuthor', 'AuthorProfile');
         $c->innerJoin('modUserGroupMember', 'UserGroupMembers');
 
-        $c->select('modUser.username');
-        $c->select('Profile.fullname as name, Profile.photo, Profile.email, Profile.work');
+        $c->select('modUser.id, modUser.username');
+        $c->select('Profile.fullname as name, Profile.photo, Profile.email, Profile.work, Profile.usename');
         $c->select('AuthorProfile.createdon, AuthorProfile.rating, AuthorProfile.tickets as topics, AuthorProfile.comments');
         $c->select('AuthorProfile.createdon, AuthorProfile.visitedon');
 
@@ -70,7 +71,7 @@ class UserGetListProcessor extends AppGetListProcessor
         $work = $this->getProperty('work');
         if (!empty($work) && $work != 'false') {
             $c->where([
-                'Profile.work' => 1
+                'Profile.work' => 1,
             ]);
         }
         $rating = $this->getProperty('rating');
@@ -92,9 +93,14 @@ class UserGetListProcessor extends AppGetListProcessor
     public function prepareArray(array $array)
     {
         $modifier = $this->Fenom->getModifier('avatar');
+
         $array['idx'] = $this->_idx++;
         $array['avatar'] = $modifier($array, 96);
-        unset($array['photo'], $array['email']);
+        $array['link'] = !empty($array['usename'])
+            ? strtolower($array['username'])
+            : (int)$array['id'];
+
+        unset($array['id'], $array['usename'], $array['username'], $array['photo'], $array['email']);
 
         return $array;
     }

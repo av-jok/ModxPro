@@ -33,15 +33,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH
     }
 }
 
-if (!empty($_SERVER['HTTP_X_PAGE_ID']) && $id = (int)$_SERVER['HTTP_X_PAGE_ID']) {
-    /** @var modResource $resource */
-    if ($resource = $modx->getObject('modResource', $id)) {
-        $context = $resource->get('context_key');
-        if ($context != $modx->context->key) {
-            $modx->switchContext($context);
-            $modx->user = null;
-            $modx->getUser($context);
-        }
+/** @var modContext $ctx */
+if (!empty($_SERVER['HTTP_X_PAGE_CONTEXT']) && $ctx = $modx->getObject('modContext', ['key' => $_SERVER['HTTP_X_PAGE_CONTEXT']])) {
+    if ($ctx->key != $modx->context->key) {
+        $modx->switchContext($ctx->key);
+        $modx->user = null;
+        $modx->getUser($ctx->key);
     }
 }
 

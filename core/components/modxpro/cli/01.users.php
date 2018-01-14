@@ -14,6 +14,7 @@ $modx->prepare("TRUNCATE {$modx->getTableName('TicketAuthor')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('modUserProfile')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('modUserGroupMember')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('haUserService')};")->execute();
+$modx->prepare("TRUNCATE {$modx->getTableName('appUserName')};")->execute();
 
 // Users
 $c = $modx->newQuery('modUser'/*, ['active' => 1]*/);
@@ -42,7 +43,7 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
 $c = $modx->newQuery('modUserProfile');
 $c->innerJoin('modUser', 'User');
 //$c->where(['User.active' => 1]);
-$c->select($modx->getSelectColumns('modUserProfile', 'modUserProfile', '', ['work'], true));
+$c->select($modx->getSelectColumns('modUserProfile', 'modUserProfile', '', ['work', 'usename', 'feedback'], true));
 $c->prepare();
 if ($stmt = $pdo->prepare($c->toSQL())) {
     if (!$stmt->execute()) {
@@ -53,7 +54,9 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
         $item = $modx->newObject('modUserProfile');
         if ($extended = json_decode($row['extended'], true)) {
             $row['work'] = !empty($extended['work']);
-            unset($extended['work']);
+            $row['feedback'] = !empty($extended['feedback']);
+            $row['usename'] = !empty($extended['username']);
+            unset($extended['work'], $extended['feedback'], $extended['username']);
             $row['extended'] = $extended;
         }
         /*
@@ -109,6 +112,20 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
     }
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $item = $modx->newObject('haUserService');
+        $item->fromArray($row, '', true, true);
+        $item->save();
+    }
+}
+
+// Usernames
+if ($stmt = $pdo->prepare("SELECT user_id as userid, username, createdon FROM {$modx->config['table_prefix']}user_names")) {
+    if (!$stmt->execute()) {
+        print_r($stmt->errorInfo());
+        exit;
+    }
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $item = $modx->newObject('appUserName');
+        $row['username'] = strtolower($row['username']);
         $item->fromArray($row, '', true, true);
         $item->save();
     }
