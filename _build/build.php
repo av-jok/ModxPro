@@ -180,7 +180,7 @@ class ModxProPackage
             ],
         ];
 
-        $idx = 0;
+        $idx = 1;
         foreach ($contexts as $name => $data) {
             /** @var modContext $context */
             $context = $this->modx->newObject('modContext');
@@ -314,7 +314,7 @@ class ModxProPackage
     protected function _addResource(array $data, $uri, $parent = 0)
     {
         $file = $data['context_key'] . '/' . $uri;
-        if ($data['context_key'] == 'en' && !file_exists($this->config['core'] . "elements/resources/{$file}.tpl")) {
+        if ($data['context_key'] != 'web' && !file_exists($this->config['core'] . "elements/resources/{$file}.tpl")) {
             $file = 'web/' . $uri;
         }
         /** @var modResource $resource */

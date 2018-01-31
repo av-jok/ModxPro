@@ -8,7 +8,7 @@ class App
     public $pdoTools;
     public $config = [];
 
-    const assets_version = '1.05-dev';
+    const assets_version = '1.10-dev';
 
 
     /**
@@ -104,11 +104,25 @@ class App
                 $fenom->assets_version = $this::assets_version;
 
                 $fenom->addAccessorSmart('switch_link', 'switch_link', Fenom::ACCESSOR_PROPERTY);
+                if ($this->modx->context->key == 'en') {
+                    $fenom->switch_link = '//' . preg_replace('#^en\.#', '', $_SERVER['HTTP_HOST']) .
+                        preg_replace('#\?.*#', '', $_SERVER['REQUEST_URI']);
+                } elseif ($this->modx->context->key == 'id') {
+                    $lang = $this->modx->getOption('cultureKey') == 'en' ? 'ru' : 'en';
+                    $fenom->switch_link = strpos($_SERVER['REQUEST_URI'], '?') !== false
+                        ? $_SERVER['REQUEST_URI'] . '&lang=' . $lang
+                        : $_SERVER['REQUEST_URI'] . '?lang=' . $lang;
+                } else {
+                    $fenom->switch_link = '//en.' . $_SERVER['HTTP_HOST'] .
+                        preg_replace('#\?.*#', '', $_SERVER['REQUEST_URI']);
+                }
+
+                /*
                 $fenom->switch_link = ($this->modx->context->key == 'en'
                         ? '//' . preg_replace('#^en\.#', '', @$_SERVER['HTTP_HOST'])
                         : '//en.' . @$_SERVER['HTTP_HOST']
                     ) . preg_replace('#\?.*#', '', @$_SERVER['REQUEST_URI']);
-
+                */
                 $fenom->addModifier('avatar', function ($data, $size = 48) use ($modx) {
                     if (is_numeric($data)) {
                         $data = [];
@@ -177,12 +191,30 @@ class App
             case 'OnLoadWebDocument':
                 break;
 
+            case 'OnUserFormSave':
+                /** @var modUser $user */
+                if (!$username = $this->modx->getObject('appUserName', ['username' => $user->username])) {
+                    /** @var appUserName $username */
+                    $username = $this->modx->newObject('appUserName');
+                    $username->fromArray([
+                        'username' => $user->username,
+                        'user_id' => $user->id,
+                    ], '', true, true);
+                    $username->save();
+                }
+                /** @var string $mode */
+                if ($mode == modSystemEvent::MODE_NEW) {
+                    $user->Profile->set('usename', true);
+                    $user->Profile->save();
+                }
+                break;
+
             case 'OnPageNotFound':
                 break;
 
             case 'OnWebPagePrerender':
                 // Compress output html for Google
-                $this->modx->resource->_output = preg_replace('#\s+#', ' ', $this->modx->resource->_output);
+                //$this->modx->resource->_output = preg_replace('#\s+#', ' ', $this->modx->resource->_output);
                 break;
         }
     }

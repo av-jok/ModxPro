@@ -134,13 +134,4 @@
             <p>{'Jevix@comment' | snippet : ['input' => $profile.comment]}</p>
         </div>
     {/if}
-
-    {*$profile | print*}
 </div>
-{*
-[twitter] => bezumkin
-[vkontakte] => bezumkin
-[github] => bezumkin
-[skype] =>
-[website] =>
-*}

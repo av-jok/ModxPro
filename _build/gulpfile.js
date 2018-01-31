@@ -59,6 +59,7 @@ gulp.task('copy', function () {
         './node_modules/prismjs/prism.js',
         './node_modules/js-cookie/src/js.cookie.js',
         './node_modules/markitup/dist/markitup.min.js',
+        './node_modules/jquery-form/dist/jquery.form.min.js',
         './node_modules/moment/min/moment-with-locales.min.js',
         './node_modules/numeral/min/numeral.min.js',
         './node_modules/fancybox/dist/js/jquery.fancybox.js',

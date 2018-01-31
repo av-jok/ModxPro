@@ -123,15 +123,14 @@ define('app/users', ['app', 'backbone'], function (App, Backbone) {
         max_limit: 20,
 
         initialize: function () {
-            App.Grid.prototype.initialize.apply(this, arguments);
-
             this.defaults = _.extend(this.defaults, {
                 limit: 20,
                 sort: 'rating',
                 dir: 'desc'
             });
-
             this.params = _.extend(this.params, App.Hash.get());
+
+            App.Grid.prototype.initialize.apply(this, arguments);
         },
 
         initializeModel: function () {

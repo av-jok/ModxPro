@@ -8,5 +8,8 @@ $xpdo_meta_map = array (
   'xPDOObject' => 
   array (
     0 => 'appUserName',
+    1 => 'appAuthClient',
+    2 => 'appAuthCode',
+    3 => 'appAuthToken',
   ),
 );

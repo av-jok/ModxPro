@@ -24,9 +24,6 @@ header {
     .social {
       @include social-icons;
     }
-    @include media-breakpoint-down(sm) {
-      display: none;
-    }
   }
   .navbar {
     position: relative;
@@ -34,12 +31,98 @@ header {
     .navbar-brand {
       width: 125px;
     }
+    .navbar-hide {
+      width: 36px;
+      &::after {
+        display: none;
+        font-family: 'Font Awesome 5 Regular';
+        content: "\f00d";
+      }
+      &.collapsed::after {
+        content: '\f0c9';
+      }
+    }
     .navbar-nav {
       flex-grow: 1;
+    }
+    .user {
+      &.login {
+        .dropdown-toggle {
+          &::after {
+            display: none;
+          }
+          svg { transition: transform ease-in-out .1s; }
+        }
+        .show {
+          .dropdown-toggle {
+            .fa-chevron-down {
+              transform: rotate(180deg);
+            }
+          }
+        }
+        .user-menu {
+          padding: 0;
+          width: 220px;
+          line-height: 21px;
+          transition: all 0.3s;
+          left: auto;
+          right: -60px;
+          .header {
+            padding: 15px;
+            background: #f3f4f5;
+            font-size: 14px;
+            display: flex;
+            .avatar {
+              height: 40px;
+              width: 40px;
+              margin-right: 14px;
+              border-radius: 3px;
+            }
+            .wrapper {
+              overflow: hidden;
+              .email { color: #737b80; }
+              .profile { color: $gray-dark; }
+            }
+          }
+          .links {
+            padding: 5px 15px;
+            width: 100%;
+            line-height: 28px;
+            a {
+              color: $gray-dark;
+              display: block;
+              &:hover {
+                color: $link-color;
+                text-decoration: none;
+              }
+              &.logout {
+                display: flex;
+                align-items: center;
+                svg { margin-left: auto; }
+                &::after {
+                  display: none;
+                  font-family: 'Font Awesome 5 Regular';
+                  content: '\f08b';
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @include media-breakpoint-up(md) {
+    .user {
+      &.login {
+        .user-menu {
+          right: -25px !important;
+        }
+      }
+    }
+    .languages {
       .language {
-        //display: flex;
-        //align-items: center;
-        img { margin-top: -2px; }
+        opacity: .7;
+        &:hover { opacity: 1; }
       }
     }
   }

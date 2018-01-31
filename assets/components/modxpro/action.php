@@ -40,6 +40,9 @@ if (!empty($_SERVER['HTTP_X_PAGE_CONTEXT']) && $ctx = $modx->getObject('modConte
         $modx->user = null;
         $modx->getUser($ctx->key);
     }
+    if ($ctx->key == 'id' && !empty($_SESSION['lang']) && $_SESSION['lang'] != $modx->getOption('cultureKey')) {
+        $modx->setOption('cultureKey', $_SESSION['lang']);
+    }
 }
 
 /** @var App $App */

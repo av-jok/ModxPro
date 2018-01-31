@@ -8,6 +8,7 @@ return [
             'OnMODXInit' => [],
             'OnHandleRequest' => [],
             'pdoToolsOnFenomInit' => [],
+            'OnUserFormSave' => [],
             //'OnPageNotFound' => [],
             //'OnLoadWebDocument' => [],
         ],

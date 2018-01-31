@@ -170,7 +170,7 @@ return [
         'index' => [
             'id' => 501,
             'pagetitle' => 'Main',
-            'hidemenu' => false,
+            'hidemenu' => true,
         ],
         'blogs' => [
             'pagetitle' => 'Blogs',
@@ -331,4 +331,13 @@ return [
             ],
         ],
     ],
+    'id' => [
+        'index' => [
+            'id' => 10001,
+            'pagetitle' => 'ID',
+            'hidemenu' => true,
+            'cacheable' => false,
+            'template' => 2,
+        ],
+    ]
 ];

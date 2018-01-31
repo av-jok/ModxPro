@@ -21,22 +21,14 @@
 label {
   margin-bottom: 0;
   cursor: pointer;
-  .custom-control-indicator {
-    //width: 1.2rem;
-    //height: 1.2rem;
-    background-color: transparent;
-    border: 1px solid #999;
-  }
-  .custom-control-description {
-    //line-height: 2rem;
-  }
-  .custom-control-input:checked ~ .custom-control-indicator {
-    border-color: transparent;
-  }
 }
 
 button:not(disabled), .btn:not(disabled) {
   cursor: pointer;
+}
+
+.custom-checkbox {
+  display: inline-block;
 }
 
 #modal {
@@ -44,23 +36,25 @@ button:not(disabled), .btn:not(disabled) {
     display: table;
     @media (min-width: 601px) {
       max-width: 600px;
-      form { padding: 15px 20px; }
+      form, .social { padding: 15px 20px; }
     }
     @media (max-width: 600px) {
       min-width: 300px;
       max-width: 100%;
       margin-top: 5px;
-      form { padding: 10px; }
+      form, .social { padding: 10px; }
     }
     .modal-body > .nav { padding-left: 30px; }
   }
   .modal-header {
     .close { font-size: 22px; }
-    /*
     .nav {
       height: 45px;
       line-height: 45px;
-      padding: 0 15px;
+      padding: 0;
+      @include media-breakpoint-up(md) {
+        padding-left: 10px;
+      }
       .nav-item {
         .nav-link {
           padding: 0 15px;
@@ -68,19 +62,15 @@ button:not(disabled), .btn:not(disabled) {
             padding-left: 0;
           }
         }
-        &:last-child {
-          display: none;
-        }
         a {
           font-size: 15px;
           &.active {
-            font-size: 16px;
+            font-weight: bold;
             color: $gray-dark;
           }
         }
       }
     }
-    */
   }
   .modal-body {
     padding: 0;

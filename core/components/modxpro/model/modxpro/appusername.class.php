@@ -2,7 +2,7 @@
 
 /**
  * @property string $username
- * @property int $userid
+ * @property int $user_id
  * @property string $createdon
  */
 class appUserName extends xPDOObject

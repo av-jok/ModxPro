@@ -29,6 +29,13 @@ return [
         'area' => 'authentication',
         'namespace' => 'core',
     ],
+    'session_name' => [
+        'key' => 'session_name',
+        'xtype' => 'textfield',
+        'value' => 'MODSESSID',
+        'area' => 'session',
+        'namespace' => 'core',
+    ],
 
     'pdotools_elements_path' => [
         'key' => 'pdotools_elements_path',
@@ -50,6 +57,63 @@ return [
         'value' => 'comFilterHandler',
         'area' => 'mse2_main',
         'namespace' => 'msearch2',
+    ],
+
+    'office_frontend_css' => [
+        'key' => 'office_frontend_css',
+        'xtype' => 'textfield',
+        'value' => '',
+        'area' => 'office_main',
+        'namespace' => 'office',
+    ],
+    'office_frontend_js' => [
+        'key' => 'office_frontend_js',
+        'xtype' => 'textfield',
+        'value' => '',
+        'area' => 'office_main',
+        'namespace' => 'office',
+    ],
+    'office_auth_frontend_css' => [
+        'key' => 'office_auth_frontend_css',
+        'xtype' => 'textfield',
+        'value' => '',
+        'area' => 'office_auth',
+        'namespace' => 'office',
+    ],
+    'office_auth_frontend_js' => [
+        'key' => 'office_auth_frontend_js',
+        'xtype' => 'textfield',
+        'value' => '',
+        'area' => 'office_auth',
+        'namespace' => 'office',
+    ],
+    'office_profile_frontend_css' => [
+        'key' => 'office_profile_frontend_css',
+        'xtype' => 'textfield',
+        'value' => '',
+        'area' => 'office_profile',
+        'namespace' => 'office',
+    ],
+    'office_profile_frontend_js' => [
+        'key' => 'office_profile_frontend_js',
+        'xtype' => 'textfield',
+        'value' => '',
+        'area' => 'office_profile',
+        'namespace' => 'office',
+    ],
+    'ha.frontend_css' => [
+        'key' => 'ha.frontend_css',
+        'xtype' => 'textfield',
+        'value' => '',
+        'area' => 'ha.main',
+        'namespace' => 'hybridauth',
+    ],
+    'ha.register_users' => [
+        'key' => 'ha.register_users',
+        'xtype' => 'combo-boolean',
+        'value' => false,
+        'area' => 'ha.main',
+        'namespace' => 'hybridauth',
     ],
 
     'app_mail_queue' => [

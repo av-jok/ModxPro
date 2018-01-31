@@ -56,25 +56,18 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
             $row['work'] = !empty($extended['work']);
             $row['feedback'] = !empty($extended['feedback']);
             $row['usename'] = !empty($extended['username']);
-            unset($extended['work'], $extended['feedback'], $extended['username']);
+            unset($extended['work'], $extended['feedback'], $extended['username'], $extended['lang'], $extended['registered'], $extended['lastactivity']);
             $row['extended'] = $extended;
         }
-        /*
-        if ($extended = json_decode($row['extended'], true)) {
-            foreach (['facebook', 'twitter', 'vkontakte'] as $k) {
-                if (!empty($extended[$k])) {
-                    if ($path = parse_url($extended[$k], PHP_URL_PATH)) {
-                        $extended[$k] = trim($path, '/');
-                    }
-                }
-            }
-            $row['extended'] = json_encode($extended);
-        }*/
         //$row['photo'] = '';
         $item->fromArray($row, '', true, true);
         $item->save();
     }
 }
+
+// Copy avatars
+shell_exec('rm -rf ~/www/assets/images/users');
+shell_exec('scp -r s264@h1.modhost.pro:/home/s264/www/assets/images/users ~/www/assets/images/');
 
 // Groups
 $c = $modx->newQuery('modUserGroupMember');
@@ -118,7 +111,7 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
 }
 
 // Usernames
-if ($stmt = $pdo->prepare("SELECT user_id as userid, username, createdon FROM {$modx->config['table_prefix']}user_names")) {
+if ($stmt = $pdo->prepare("SELECT user_id, username, createdon FROM {$modx->config['table_prefix']}user_names")) {
     if (!$stmt->execute()) {
         print_r($stmt->errorInfo());
         exit;

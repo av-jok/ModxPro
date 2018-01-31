@@ -16,6 +16,7 @@ requirejs.config({
         prism: 'lib/prism.min',
         markitup: 'lib/markitup.min',
         fancybox: 'lib/jquery.fancybox.min',
+        jquery_form: 'lib/jquery.form.min',
         moment: 'lib/moment-with-locales.min',
         numeral: 'lib/numeral.min',
         pdopage: 'lib/pdopage.min',
@@ -75,12 +76,25 @@ FontAwesomeConfig = {
 };
 // Disable javascript links before initialize
 AppInitialized = false;
-for (var i in document.links) {
+var i;
+for (i in document.links) {
     if (!document.links.hasOwnProperty(i)) {
         continue;
     }
     document.links[i].onclick = function (e) {
         if (!AppInitialized && (typeof this.href === 'undefined' || this.href === '' || this.href === '#' || this.getAttribute('data-toggle'))) {
+            e = e || window.event;
+            e.preventDefault();
+        }
+    }
+}
+
+for (i in document.forms) {
+    if (!document.forms.hasOwnProperty(i)) {
+        continue;
+    }
+    document.forms[i].onsubmit = function (e) {
+        if (!AppInitialized) {
             e = e || window.event;
             e.preventDefault();
         }

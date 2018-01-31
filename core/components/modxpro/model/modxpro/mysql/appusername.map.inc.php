@@ -11,7 +11,7 @@ $xpdo_meta_map['appUserName']= array (
   'fields' => 
   array (
     'username' => NULL,
-    'userid' => NULL,
+    'user_id' => NULL,
     'createdon' => 'CURRENT_TIMESTAMP',
   ),
   'fieldMeta' => 
@@ -23,7 +23,7 @@ $xpdo_meta_map['appUserName']= array (
       'phptype' => 'string',
       'null' => false,
     ),
-    'userid' => 
+    'user_id' => 
     array (
       'dbtype' => 'int',
       'precision' => '10',
@@ -56,15 +56,15 @@ $xpdo_meta_map['appUserName']= array (
         ),
       ),
     ),
-    'userid' => 
+    'user_id' => 
     array (
-      'alias' => 'userid',
+      'alias' => 'user_id',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
       'columns' => 
       array (
-        'userid' => 
+        'user_id' => 
         array (
           'length' => '',
           'collation' => 'A',

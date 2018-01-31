@@ -21,3 +21,140 @@
     vertical-align: middle;
   }
 }
+form {
+  .help {
+    padding: 15px 20px 10px 80px;
+    background-position: 20px 20px;
+  }
+  .btn:not(disabled) {
+    cursor: pointer;
+  }
+  .form-group {
+    input, button {
+      border: none;
+      background: transparent;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    input[type="email"],
+    input[type="text"] {
+      font-size: 16px;
+      border-bottom: 2px solid #dbdbdb;
+      width: 100%;
+      padding: 4px 0;
+      border-radius: 0;
+    }
+    textarea {
+      border-radius: 5px;
+      border: 2px solid #dbdbdb;
+      width: 100%;
+      padding: 5px;
+      resize: none;
+    }
+    textarea, input[type="text"], input[type="number"], input[type="password"], input[type="email"] {
+      &:focus {
+        border-color: $link-color;
+        background: transparent;
+        & + .input-group-addon {
+          border-color: $link-color;
+        }
+      }
+    }
+    input, textarea, select {
+      &.error {
+        border-color: brown !important;
+      }
+    }
+    .error {
+      .error-placeholder { border-color: brown !important; }
+    }
+  }
+  button {
+    &.input-group-addon {
+      cursor: pointer;
+      color: $gray-900;
+      &:hover {
+        color: $gray-dark;
+      }
+    }
+    &[type="submit"] {
+      &.input-group-addon {
+        color: green;
+        &:hover {
+          color: darkgreen;
+        }
+      }
+    }
+  }
+  .close-preview {
+    display: none;
+    text-align: right;
+    &:before {
+      @extend .fa;
+      position: relative;
+      width: 16px;
+      height: 16px;
+      float: right;
+      content: '\f057';
+      cursor: pointer;
+    }
+    &:hover {
+      &:before { opacity: .7; }
+    }
+  }
+  .preview {
+    padding: 10px 20px 10px 10px;
+    margin-bottom: 20px;
+    border: 3px solid #ddd;
+    border-radius: 5px;
+    overflow: auto;
+    display: none;
+    max-height: 300px;
+    width: 100%;
+  }
+
+  &.search {
+    .form-group {
+      padding: 4px 0 3px 0;
+      border-bottom: 2px solid #dbdbdb;
+      display: flex;
+      input, button {
+        border: none;
+        background: transparent;
+        padding: 0;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding-right: 10px;
+      }
+      button {
+        font-size: 18px;
+        color: #c2c2c2;
+        cursor: pointer;
+        margin-left: 8px;
+        &[type="reset"] {
+          &[disabled] {
+            display: none;
+          }
+        }
+      }
+      &.active, &:hover {
+        border-bottom-color: $link-color;
+        button {
+          color: $link-color;
+        }
+      }
+    }
+  }
+
+  &.coupons {
+    .form-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    label { margin: 0; }
+  }
+
+}

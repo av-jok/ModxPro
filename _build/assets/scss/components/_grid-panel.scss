@@ -38,13 +38,13 @@
         }
       }
       &.asc::after {
-        font-family: "Font Awesome 5 Regular";
-        content: "\f161";
+        font-family: 'Font Awesome 5 Regular';
+        content: '\f161';
         color: $link-color;
       }
       &.desc::after {
-        font-family: "Font Awesome 5 Regular";
-        content: "\f160";
+        font-family: 'Font Awesome 5 Regular';
+        content: '\f160';
         color: $link-color;
       }
     }

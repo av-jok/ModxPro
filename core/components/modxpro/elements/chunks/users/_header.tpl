@@ -14,12 +14,12 @@
                 <i class="fal fa-ban"></i> {$.en ? 'User is blocked' : 'Юзер заблокирован'}
             </button>
         {elseif $profile.feedback}
-            {if $_modx->user.id}
+            {if $_modx->isAuthenticated()}
                 <a href="#message" class="btn btn-success">
                     <i class="fal fa-at"></i> {$.en ? 'Write a message' : 'Написать сообщение'}
                 </a>
             {else}
-                <a href="#auth/login" class="btn btn-success">
+                <a href="#auth/login" class="btn btn-secondary">
                     <i class="fal fa-at"></i> {$.en ? 'Write a message' : 'Написать сообщение'}
                 </a>
             {/if}

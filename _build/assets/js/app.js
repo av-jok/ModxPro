@@ -6,6 +6,8 @@ define('app', [
     /**
      * @module app
      * @property Router
+     * @property Auth
+     * @property Profile
      * @property Users
      * @property User
      */
@@ -263,15 +265,17 @@ define('app', [
                 Backbone.history.start({root: document.location.pathname});
             });
 
+            // Tooltip
+            $('[data-toggle="tooltip"]').tooltip();
 
             // Modal
-            $('[data-toggle="tooltip"]').tooltip();
             $(document).on('hide.bs.modal', function () {
                 App.Router.clear();
             });
-            $('.modal').on('shown.bs.modal', function () {
+            $(document).on('shown.bs.modal', '#modal', function () {
                 $(this).find('input:visible:first').focus();
-            }).on('shown.bs.tab', function () {
+                $(this).find('[data-toggle="tooltip"]').tooltip();
+            }).on('shown.bs.tab', '#modal', function () {
                 $(this).find('.tab-pane:visible').find('input:visible:first').focus();
             });
             /*
@@ -287,7 +291,6 @@ define('app', [
                     }
                 }
             });
-
             // Select
             $(document).on('click', '.btn-group.select .dropdown-item', function (e) {
                 e.preventDefault();
@@ -318,18 +321,20 @@ define('app', [
 
             // Links
             $(document).on('click', 'a.language', function (e) {
-                e.preventDefault();
                 var host = document.location.host;
-                if ($(this).hasClass('en')) {
-                    host = 'en.' + host;
-                } else {
-                    host = host.replace(/^en\./, '');
+                if (!host.match('^id.')) {
+                    e.preventDefault();
+                    if ($(this).hasClass('en')) {
+                        host = 'en.' + host;
+                    } else {
+                        host = host.replace(/^en\./, '');
+                    }
+                    var href = document.location.protocol + '//' + host + document.location.pathname;
+                    if (!_.isEmpty(document.location.search)) {
+                        href += document.location.search;
+                    }
+                    document.location.href = href;
                 }
-                var href = document.location.protocol + '//' + host + document.location.pathname;
-                if (!_.isEmpty(document.location.search)) {
-                    href += document.location.search;
-                }
-                document.location.href = href;
             });
 
             // Lexicon

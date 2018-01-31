@@ -10,16 +10,18 @@
             </div>
         </div>
         <div class="col12 col-md-6 pl-md-3 mt-3 mt-md-0">
-            <label class="custom-control custom-checkbox">
-                <input type="checkbox" name="rating" class="custom-control-input filter-rating">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">{$.en ? 'Positive rating' : 'Положительный рейтинг'}</span>
-            </label>
-            <label class="custom-control custom-checkbox">
-                <input type="checkbox" name="work" class="custom-control-input filter-work">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">{$.en ? 'Accepts orders' : 'Принимает заказы'}</span>
-            </label>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" name="rating" class="custom-control-input filter-rating" id="filter-rating">
+                <label class="custom-control-label" for="filter-rating">
+                    {$.en ? 'Positive rating' : 'Положительный рейтинг'}
+                </label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" name="work" class="custom-control-input filter-work" id="filter-work">
+                <label class="custom-control-label" for="filter-work">
+                    {$.en ? 'Accepts orders' : 'Принимает заказы'}
+                </label>
+            </div>
         </div>
     </div>
     <div class="table-wrapper">

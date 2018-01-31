@@ -19,15 +19,85 @@
 
     <object class="appUserName" table="app_user_names" extends="xPDOObject">
         <field key="username" dbtype="varchar" precision="100" phptype="string" null="false"/>
-        <field key="userid" dbtype="int" precision="10" phptype="int" null="false"/>
+        <field key="user_id" dbtype="int" precision="10" phptype="int" null="false"/>
         <field key="createdon" dbtype="timestamp" phptype="timestamp" null="false" default="CURRENT_TIMESTAMP"/>
 
         <index alias="PRIMARY" name="PRIMARY" primary="true" unique="false" type="BTREE">
             <column key="username" length="" collation="A" null="false"/>
         </index>
-        <index alias="userid" name="userid" primary="false" unique="false" type="BTREE">
-            <column key="userid" length="" collation="A" null="false"/>
+        <index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
+            <column key="user_id" length="" collation="A" null="false"/>
         </index>
+    </object>
+
+    <object class="appAuthClient" table="app_auth_clients" extends="xPDOObject">
+        <field key="id" dbtype="varchar" precision="100" phptype="string" null="false"/>
+        <field key="secret" dbtype="varchar" precision="100" phptype="varchar" null="false"/>
+        <field key="redirect_uri" dbtype="varchar" precision="255" phptype="string" null="false"/>
+        <field key="grant_types" dbtype="text" phptype="string" null="true"/>
+        <field key="scope" dbtype="text" phptype="string" null="true"/>
+        <field key="user_id" dbtype="int" precision="10" phptype="int" null="true"/>
+        <field key="title" dbtype="varchar" precision="255" phptype="string" null="true"/>
+        <field key="logo" dbtype="varchar" precision="255" phptype="string" null="true"/>
+        <field key="description" dbtype="text" phptype="string" null="true"/>
+
+        <index alias="PRIMARY" name="PRIMARY" primary="true" unique="false" type="BTREE">
+            <column key="id" length="" collation="A" null="false"/>
+        </index>
+        <index alias="secret" name="secret" primary="false" unique="false" type="BTREE">
+            <column key="secret" length="" collation="A" null="false"/>
+        </index>
+        <index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
+            <column key="user_id" length="" collation="A" null="false"/>
+        </index>
+
+        <composite alias="Codes" class="AppAuthCode" local="id" foreign="client_id" cardinality="many" owner="local" />
+        <aggregate alias="User" class="modUser" local="user_id" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="UserProfile" class="modUserProfile" local="user_id" foreign="internalKey" cardinality="one" owner="foreign" />
+    </object>
+
+    <object class="appAuthCode" table="app_auth_codes" extends="xPDOObject">
+        <field key="code" dbtype="varchar" precision="40" phptype="string" null="false"/>
+        <field key="user_id" dbtype="int" precision="10" phptype="int" null="false"/>
+        <field key="client_id" dbtype="varchar" precision="100" phptype="string" null="false"/>
+        <field key="expires" dbtype="timestamp" phptype="timestamp" null="false"/>
+        <field key="scope" dbtype="text" phptype="string" null="true"/>
+
+        <index alias="PRIMARY" name="PRIMARY" primary="true" unique="false" type="BTREE">
+            <column key="code" length="" collation="A" null="false"/>
+        </index>
+        <index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
+            <column key="user_id" length="" collation="A" null="false"/>
+        </index>
+        <index alias="client_id" name="client_id" primary="false" unique="false" type="BTREE">
+            <column key="client_id" length="" collation="A" null="false"/>
+        </index>
+
+        <aggregate alias="Client" class="AppAuthClient" local="client_id" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="User" class="modUser" local="user_id" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="UserProfile" class="modUserProfile" local="user_id" foreign="internalKey" cardinality="one" owner="foreign" />
+    </object>
+
+    <object class="appAuthToken" table="app_auth_tokens" extends="xPDOObject">
+        <field key="token" dbtype="varchar" precision="40" phptype="string" null="false"/>
+        <field key="user_id" dbtype="int" precision="10" phptype="int" null="false"/>
+        <field key="client_id" dbtype="varchar" precision="100" phptype="string" null="false"/>
+        <field key="expires" dbtype="timestamp" phptype="timestamp" null="false"/>
+        <field key="scope" dbtype="text" phptype="string" null="true"/>
+
+        <index alias="PRIMARY" name="PRIMARY" primary="true" unique="false" type="BTREE">
+            <column key="token" length="" collation="A" null="false"/>
+        </index>
+        <index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
+            <column key="user_id" length="" collation="A" null="false"/>
+        </index>
+        <index alias="client_id" name="client_id" primary="false" unique="false" type="BTREE">
+            <column key="client_id" length="" collation="A" null="false"/>
+        </index>
+
+        <aggregate alias="Client" class="AppAuthClient" local="client_id" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="User" class="modUser" local="user_id" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="UserProfile" class="modUserProfile" local="user_id" foreign="internalKey" cardinality="one" owner="foreign" />
     </object>
 
 </model>

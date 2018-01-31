@@ -33,11 +33,13 @@ class AppRouter
                 $r->addRoute('GET', '', 'userPage');
                 $r->addRoute('GET', '/{page:topics|comments|favorites}[/{subpage:drafts|comments}]', 'userPage');
                 // Redirect from old url
-                $r->addRoute('GET', '/tickets[/drafts]', function ($uri) {
+                $r->addRoute('GET', '/tickets[/drafts]', function () {
                     $redirect = rtrim(str_replace('/tickets', '/topics', $_REQUEST['q']), '/');
                     $this->modx->sendRedirect($redirect, ['responseCode' => 'HTTP/1.1 301 Moved Permanently']);
                 });
             });
+            $r->addRoute(['GET', 'POST'], '/oauth2[/{action}]', 'authPage');
+            $r->addRoute('GET', '/me', 'userProfile');
         });
     }
 
@@ -61,9 +63,28 @@ class AppRouter
             $this->modx->sendRedirect(preg_replace('#\.html$#i', '', $uri), ['responseCode' => 'HTTP/1.1 301 Moved Permanently']);
         }
 
-        // Switch contexts
+        // Switch contexts and language
         if (strpos($host, 'en.') === 0) {
             $this->modx->switchContext('en');
+            $_SESSION['lang'] = 'en';
+        } elseif (strpos($host, 'id.') === 0) {
+            $this->modx->switchContext('id');
+            if (!empty($_GET['lang']) && in_array($_GET['lang'], ['ru', 'en'])) {
+                $_SESSION['lang'] = $_GET['lang'];
+                unset($_GET['lang']);
+                $url = preg_replace('#\?.*#', '', $_SERVER['REQUEST_URI']);
+                if (!empty($_GET)) {
+                    $url .= '?' . http_build_query($_GET);
+                }
+                $this->modx->sendRedirect($url);
+            } elseif (!empty($_SESSION['lang'])) {
+                $this->modx->setOption('cultureKey', $_SESSION['lang']);
+            } elseif (!preg_match('#\bru\b#i', $_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+                $_SESSION['lang'] = 'en';
+                $this->modx->setOption('cultureKey', 'en');
+            }
+        } else {
+            $_SESSION['lang'] = 'ru';
         }
 
         // FastRoute
@@ -98,7 +119,7 @@ class AppRouter
             if (!$record = $this->modx->getObject('appUserName', ['username' => $username])) {
                 return false;
             }
-            $where['id'] = $record->userid;
+            $where['id'] = $record->user_id;
         }
 
         /** @var modUser $user */
@@ -127,7 +148,9 @@ class AppRouter
      */
     public function userPage(array $vars)
     {
-        if (!$user = $this->getUser($vars['user'])) {
+        if (!in_array($this->modx->context->key, ['web', 'en'])) {
+            $this->modx->sendRedirect('/');
+        } elseif (!$user = $this->getUser($vars['user'])) {
             return;
         }
 
@@ -178,6 +201,7 @@ class AppRouter
                     'github' => 'https://github.com',
                     'twitter' => 'https://twitter.com',
                     'vkontakte' => 'https://vk.com',
+                    'telegram' => '',
                     'skype' => '',
                 ];
                 foreach ($services as $service => $link) {
@@ -197,6 +221,113 @@ class AppRouter
         $this->modx->resource->set('content', $this->pdoTools->getChunk('@FILE chunks/users/' . $data['tab'] . '.tpl', $data));
 
         $this->modx->request->prepareResponse();
+    }
+
+
+    /**
+     * @param array $vars
+     */
+    public function authPage(array $vars)
+    {
+        if (!$vars) {
+            $this->modx->sendRedirect('/');
+        }
+
+        /** @var AppAuth $auth */
+        $auth = $this->modx->getService('AppAuth', 'AppAuth', MODX_CORE_PATH . 'components/modxpro/model/');
+        $server = new OAuth2\Server($auth);
+        $request = OAuth2\Request::createFromGlobals();
+        $response = new OAuth2\Response();
+
+        switch ($vars['action']) {
+            case 'auth':
+                if ($server->validateAuthorizeRequest($request, $response)) {
+                    if ($this->modx->user->isAuthenticated($this->modx->context->key)) {
+                        $agreement = (bool)$this->modx->getCount('appAuthToken', [
+                            'client_id' => $request->query('client_id'),
+                            'user_id' => $this->modx->user->id,
+                        ]);
+                        if ($agreement) {
+                            $server->handleAuthorizeRequest($request, $response, true, $this->modx->user->id);
+                        } elseif ($agree = $request->request('agree')) {
+                            $server->handleAuthorizeRequest($request, $response, $agree == 'yes', $this->modx->user->id);
+                        } else {
+                            $this->modx->resource = $this->modx->getObject('modResource', $this->modx->getOption('site_start'));
+                            $this->modx->resource->set('pagetitle', 'OAuth2');
+                            $this->modx->resource->set('content', $this->pdoTools->getChunk(
+                                '@FILE chunks/oauth/auth.tpl',
+                                $auth->getClientDetails($_GET['client_id'])
+                            ));
+                            $this->modx->request->prepareResponse();
+                        }
+                    } else {
+                        $this->modx->sendForward($this->modx->getOption('site_start'));
+                    }
+                }
+                exit($response->send());
+                break;
+            case 'token':
+                $server->handleTokenRequest($request, $response);
+                exit($response->send());
+                break;
+            case 'profile':
+                if (!$server->verifyResourceRequest($request, $response)) {
+                    exit($response->send());
+                }
+                /** @var OAuth2\Controller\ResourceController $controller */
+                if ($controller = $server->getResourceController()) {
+                    if ($token = $controller->getToken()) {
+                        /** @var modUser $user */
+                        if ($user = $this->modx->getObject('modUser', ['id' => $token['user_id']])) {
+                            $data = [
+                                'id' => $user->id,
+                                'identifier' => $user->username,
+                                'displayname' => $user->Profile->fullname,
+                                'dob' => '',
+                                'email' => $user->Profile->email,
+                                'photoURL' => $user->Profile->photo,
+                                'webSiteURL' => $user->Profile->website,
+                                'phone' => $user->Profile->phone,
+                                'address' => $user->Profile->address,
+                                'country' => $user->Profile->country,
+                                'region' => $user->Profile->state,
+                                'city' => $user->Profile->city,
+                                'zip' => $user->Profile->zip,
+                                'profileurl' => 'https://modx.pro/users/' .
+                                    ($user->Profile->usename ? $user->username : $user->id),
+                            ];
+                            exit(json_encode($data));
+                        }
+                    }
+                }
+                break;
+        }
+
+        $this->modx->sendRedirect('/');
+    }
+
+
+    /**
+     * Redirects authenticated user to his profile
+     */
+    public function userProfile()
+    {
+        if (!$this->modx->user->isAuthenticated()) {
+            $url = '/';
+        } else {
+            if ($this->modx->context->key == 'id') {
+                $replace = $this->modx->getOption('cultureKey') == 'en' ? 'en.' : '';
+                $host = preg_replace('#^id\.#', $replace, $this->modx->getOption('http_host'));
+                $url = '//' . $host . '/users/';
+            } else {
+                $url = '/users/';
+            }
+            $url .= $this->modx->user->Profile->get('usename')
+                ? $this->modx->user->username
+                : $this->modx->user->id;
+        }
+
+        $this->modx->sendRedirect($url);
     }
 
 }
