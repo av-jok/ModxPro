@@ -320,6 +320,7 @@ define('app', [
             });
 
             // Links
+            /*
             $(document).on('click', 'a.language', function (e) {
                 var host = document.location.host;
                 if (!host.match('^id.')) {
@@ -336,15 +337,16 @@ define('app', [
                     document.location.href = href;
                 }
             });
+            */
 
             // Lexicon
             $.post(App.action_url, {action: 'lexicon/get'}, function (res) {
                 if (res.success) {
                     App.Utils._lexicon = res.object;
-                    $.holdReady(false);
                     // noinspection JSUnresolvedVariable
                     AppInitialized = true;
                     $(document).trigger('ready');
+                    App.Utils.highlight();
                 }
             }, 'json');
         }

@@ -45,7 +45,7 @@ class AppGetListProcessor extends modObjectGetListProcessor
             $data['results'] = $c->stmt->fetchAll(PDO::FETCH_ASSOC);
         } else {
             $this->modx->log(modX::LOG_LEVEL_ERROR,
-                "[Hoster] GetList error: " . print_r($c->stmt->errorInfo(), true) . $c->toSQL());
+                "[App] GetList error: " . print_r($c->stmt->errorInfo(), true) . $c->toSQL());
         }
 
         return $data;

@@ -66,8 +66,8 @@
                     </label>
                     <div class="col-md-9">
                         <label for="office_profile_photo_file">
-                            <img src="{$_pls | avatar : 100}" id="office_profile_photo" width="100" height="100"
-                                 data-gravatar="{$gravatar}?s=100"/>
+                            <img src="{$_pls | avatar : 100}" id="office_profile_photo" width="100"
+                                 srcset="{$_pls | avatar : 200} 2x" data-gravatar="{$gravatar}?s=100"/>
                         </label>
                         <a href="#" id="office_profile_photo_remove"{if !$photo} class="d-none"{/if}">
                             {'office_profile_avatar_remove' | lexicon}

@@ -1,0 +1,55 @@
+pre[class*="language-"], code[class*="language-"] {
+  &::selection, ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+  }
+}
+
+/* Inline code */
+.token {
+  &.comment, &.prolog, &.doctype, &.cdata {
+    color: slategray;
+  }
+  &.punctuation {
+    color: #999;
+  }
+}
+.namespace {
+  opacity: .7;
+}
+.token {
+  &.property, &.tag, &.boolean, &.number, &.constant, &.symbol, &.deleted {
+    color: #905;
+  }
+  &.selector, &.attr-name, &.string, &.char, &.builtin, &.inserted {
+    color: #690;
+  }
+  &.operator, &.entity, &.url {
+    color: #a67f59;
+    //background: hsla(0, 0%, 100%, 0.5);
+  }
+}
+.language-css .token.string, .style .token.string {
+  color: #a67f59;
+  background: hsla(0, 0%, 100%, 0.5);
+}
+.token {
+  &.atrule, &.attr-value, &.keyword {
+    color: #07a;
+  }
+  &.function {
+    color: #DD4A68;
+  }
+  &.regex, &.important, &.variable {
+    color: #e90;
+  }
+  &.important, &.bold {
+    font-weight: bold;
+  }
+  &.italic {
+    font-style: italic;
+  }
+  &.entity {
+    cursor: help;
+  }
+}

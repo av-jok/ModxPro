@@ -16,6 +16,9 @@ $xpdo_meta_map['appAuthClient']= array (
     'grant_types' => NULL,
     'scope' => NULL,
     'user_id' => NULL,
+    'title' => NULL,
+    'logo' => NULL,
+    'description' => NULL,
   ),
   'fieldMeta' => 
   array (
@@ -57,6 +60,26 @@ $xpdo_meta_map['appAuthClient']= array (
       'dbtype' => 'int',
       'precision' => '10',
       'phptype' => 'int',
+      'null' => true,
+    ),
+    'title' => 
+    array (
+      'dbtype' => 'varchar',
+      'precision' => '255',
+      'phptype' => 'string',
+      'null' => true,
+    ),
+    'logo' => 
+    array (
+      'dbtype' => 'varchar',
+      'precision' => '255',
+      'phptype' => 'string',
+      'null' => true,
+    ),
+    'description' => 
+    array (
+      'dbtype' => 'text',
+      'phptype' => 'string',
       'null' => true,
     ),
   ),

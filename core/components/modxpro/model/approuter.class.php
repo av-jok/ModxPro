@@ -29,17 +29,22 @@ class AppRouter
     public function initialize()
     {
         $this->dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-            $r->addGroup('/users/{user}', function (FastRoute\RouteCollector $r) {
-                $r->addRoute('GET', '', 'userPage');
-                $r->addRoute('GET', '/{page:topics|comments|favorites}[/{subpage:drafts|comments}]', 'userPage');
-                // Redirect from old url
-                $r->addRoute('GET', '/tickets[/drafts]', function () {
-                    $redirect = rtrim(str_replace('/tickets', '/topics', $_REQUEST['q']), '/');
-                    $this->modx->sendRedirect($redirect, ['responseCode' => 'HTTP/1.1 301 Moved Permanently']);
+            if (strpos($_SERVER['HTTP_HOST'], 'id.') === 0) {
+                $r->addRoute(['GET', 'POST'], '/oauth2[/{action}]', 'authPage');
+                $r->addRoute('GET', '/me', 'userProfile');
+            } else {
+                $r->addGroup('/users/{user}', function (FastRoute\RouteCollector $r) {
+                    $r->addRoute('GET', '', 'userPage');
+                    $r->addRoute('GET', '/{page:topics|comments|favorites}[/{subpage:drafts|comments}]', 'userPage');
+                    // Redirect from old url
+                    $r->addRoute('GET', '/tickets[/drafts]', function () {
+                        $redirect = rtrim(str_replace('/tickets', '/topics', $_REQUEST['q']), '/');
+                        $this->modx->sendRedirect($redirect, ['responseCode' => 'HTTP/1.1 301 Moved Permanently']);
+                    });
                 });
-            });
-            $r->addRoute(['GET', 'POST'], '/oauth2[/{action}]', 'authPage');
-            $r->addRoute('GET', '/me', 'userProfile');
+                $r->addRoute('GET', '/topic[/{id:\d+}]', 'editTopic');
+                $r->addRoute('GET', '/{section:[a-z]+}/{id:\d+}', 'viewTopic');
+            }
         });
     }
 
@@ -62,7 +67,6 @@ class AppRouter
         if (preg_match('#\.html$#i', $uri)) {
             $this->modx->sendRedirect(preg_replace('#\.html$#i', '', $uri), ['responseCode' => 'HTTP/1.1 301 Moved Permanently']);
         }
-
         // Switch contexts and language
         if (strpos($host, 'en.') === 0) {
             $this->modx->switchContext('en');
@@ -164,7 +168,7 @@ class AppRouter
         $this->modx->resource = $this->modx->getObject('modResource', $this->modx->getOption('users_id'));
 
         // Prepare data
-        $author = $user->getOne('AuthorProfile');
+        $author = $this->modx->getObject('comAuthor', $user->id);
         $data = [
             'user' => $user->get(['id', 'username', 'external_key']),
             'profile' => $user->Profile->get(['fullname', 'email', 'photo', 'blocked', 'extended', 'comment', 'website', 'city', 'feedback', 'usename']),
@@ -328,6 +332,61 @@ class AppRouter
         }
 
         $this->modx->sendRedirect($url);
+    }
+
+
+    /**
+     * @param $vars
+     */
+    public function viewTopic($vars)
+    {
+        $topic = null;
+        $c = $this->modx->newQuery('comTopic', ['id' => $vars['id']]);
+        $c->innerJoin('modResource', 'Section');
+        $c->innerJoin('modUserProfile', 'AuthorProfile');
+        $c->innerJoin('comTotal', 'Total');
+        $c->select($this->modx->getSelectColumns('modResource', 'Section', 'section_', ['pagetitle', 'context_key', 'uri']));
+        $c->select($this->modx->getSelectColumns('comTopic', 'comTopic', '', ['id', 'pagetitle', 'content', 'published', 'createdby', 'publishedon']));
+        $c->select($this->modx->getSelectColumns('comTotal', 'Total', '', ['comments', 'views', 'stars', 'rating', 'rating_plus', 'rating_minus']));
+        $c->select($this->modx->getSelectColumns('modUserProfile', 'AuthorProfile', '', ['photo', 'email', 'fullname']));
+        if ($c->prepare() && $c->stmt->execute()) {
+            $topic = $c->stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        if (!$topic) {
+            return;
+        }
+
+        if ($vars['section'] != $topic['section_uri']) {
+            $this->modx->sendRedirect('/' . $topic['section_uri'] . '/' . $topic['id']);
+        }
+
+        if ($topic['section_context_key'] != $this->modx->context->key) {
+            $host = $this->modx->getOption('http_host');
+            $host = $this->modx->getOption('cultureKey') == 'en'
+                ? preg_replace('#^en\.#', '', $host)
+                : 'en.' . $host;
+            $url = '//' . $host . '/' . implode('/', $vars);
+            $this->modx->sendRedirect($url);
+        }
+
+        $this->modx->resource = $this->modx->getObject('modResource', $this->modx->getOption('blogs_id'));
+        if (!$topic['published'] && ($this->modx->user->id != $topic['createdby'] && !$this->modx->user->isMember('Administrator'))) {
+            header('HTTP/1.0 403 Forbidden');
+            $this->modx->resource->set('pagetitle', '');
+            $this->modx->resource->set('content', $this->pdoTools->getChunk('@FILE chunks/topics/unpublished.tpl', $topic));
+        } else {
+            $this->modx->resource->set('is_topic', true);
+            $this->modx->resource->set('pagetitle', $topic['pagetitle']);
+            $this->modx->resource->set('content', $this->pdoTools->getChunk('@FILE chunks/topics/topic.tpl', $topic));
+        }
+        $this->modx->request->prepareResponse();
+    }
+
+
+    public function editTopic($vars)
+    {
+        print_r($vars);
+        die;
     }
 
 }

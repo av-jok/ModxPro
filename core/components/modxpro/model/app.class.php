@@ -113,16 +113,14 @@ class App
                         ? $_SERVER['REQUEST_URI'] . '&lang=' . $lang
                         : $_SERVER['REQUEST_URI'] . '?lang=' . $lang;
                 } else {
-                    $fenom->switch_link = '//en.' . $_SERVER['HTTP_HOST'] .
-                        preg_replace('#\?.*#', '', $_SERVER['REQUEST_URI']);
+                    $fenom->switch_link = '//en.' . $_SERVER['HTTP_HOST'];
+                    if (!empty($this->modx->resource) && !empty($this->modx->resource->is_topic)) {
+                        $fenom->switch_link .= preg_replace('#\/\d+(?:\?.*)?#', '', $_SERVER['REQUEST_URI']);
+                    } else {
+                        $fenom->switch_link .= preg_replace('#\?.*#', '', $_SERVER['REQUEST_URI']);
+                    }
                 }
 
-                /*
-                $fenom->switch_link = ($this->modx->context->key == 'en'
-                        ? '//' . preg_replace('#^en\.#', '', @$_SERVER['HTTP_HOST'])
-                        : '//en.' . @$_SERVER['HTTP_HOST']
-                    ) . preg_replace('#\?.*#', '', @$_SERVER['REQUEST_URI']);
-                */
                 $fenom->addModifier('avatar', function ($data, $size = 48) use ($modx) {
                     if (is_numeric($data)) {
                         $data = [];
@@ -156,16 +154,20 @@ class App
                     foreach ($code[0] as $idx => $from) {
                         // html, css, javascript
                         $lang = 'markup';
-                        $content = htmlspecialchars_decode($from);
+                        $content = str_replace(
+                            ['&#91;', '&#93;', '&#96;', '&#123;', '&#125;'],
+                            ['[', ']', '``', '{', '}'],
+                            htmlspecialchars_decode($from)
+                        );
                         if (strpos($content, '<?') !== false || strpos($content, '->') !== false) {
                             $lang = 'php';
-                        } elseif (preg_match('#=`\w+`#s', $input) || preg_match('#\[\[#s', $input)) {
+                        } elseif (preg_match('#=`\w+`#s', $content) || preg_match('#\[\[#s', $content)) {
                             //$lang = 'modx';
-                        } elseif (preg_match('#\s(select|from|update|table|insert|into)\s#is', $input)) {
+                        } elseif (preg_match('#\b(select|from|update|table|insert|into)\b#is', $input)) {
                             $lang = 'sql';
                         } elseif (preg_match('#\b(location|include|server)\b#s', $input)) {
                             $lang = 'nginx';
-                        } elseif (preg_match('#{(\w|\'|\"\$)#s', $input)) {
+                        } elseif (preg_match('#\{(\$|\/|\w+(\s|\(|\|)|\(|\')#', $content)) {
                             $lang = 'smarty';
                         }
                         $input = str_replace(
@@ -258,6 +260,10 @@ class App
      */
     protected function updateModel()
     {
+        if ($this->modx->loadClass('modUser')) {
+            // Remove Tickets connection
+            unset($this->modx->map['modUser']['composites']['AuthorProfile']);
+        }
         if ($this->modx->loadClass('modUserProfile')) {
             $this->modx->map['modUserProfile']['fields']['feedback'] =
             $this->modx->map['modUserProfile']['fields']['usename'] =

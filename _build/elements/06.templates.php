@@ -9,4 +9,8 @@ return [
         'file' => 'id',
         'description' => 'Id template',
     ],
+    'SectionTemplate' => [
+        'file' => 'section',
+        'description' => 'Section template',
+    ],
 ];

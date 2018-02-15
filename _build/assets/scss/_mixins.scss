@@ -95,3 +95,11 @@
   }
   @content;
 }
+
+@mixin image {
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  @content;
+}

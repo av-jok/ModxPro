@@ -1,10 +1,8 @@
+<div id="topics-list">
+    {include 'file:chunks/_banner.tpl'}
 
-
-<div class="container">
-    <h1 class="display-3">Hello,
-        <span class="fa-layers fa-fw">
-                <i class="fa fa-circle"></i>
-                <i class="fab fa-modx fa-inverse"></i>
-            </span>!
-    </h1>
+    {'@FILE snippets/get_topics.php' | snippet : [
+        'excludeSections' => ['help', 'work'],
+        'showSection' => true,
+    ]}
 </div>

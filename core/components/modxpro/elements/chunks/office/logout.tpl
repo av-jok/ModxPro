@@ -9,8 +9,8 @@
     </button>
     <div class="dropdown-menu user-menu">
         <div class="header">
-            <a href="{$profile}">
-                <img src="{$_modx->user | avatar : 80}" class="avatar">
+            <a href="{$profile}" class="avatar">
+                <img src="{$_modx->user | avatar : 80}" srcset="{$_modx->user | avatar : 160} 2x" width="80" />
             </a>
             <div class="wrapper">
                 <div class="email">{$email}</div>

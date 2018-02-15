@@ -124,6 +124,8 @@ gulp.task('copy', function () {
             path.extname = '.js';
         }))
         .pipe(gulp.dest(dst));
+
+    gulp.src('./node_modules/fancybox/dist/img/**').pipe(gulp.dest(assets + 'img/fancybox/'))
 });
 
 

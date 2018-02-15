@@ -10,7 +10,7 @@ $groups = [
 
 // Clear tables
 $modx->prepare("TRUNCATE {$modx->getTableName('modUser')};")->execute();
-$modx->prepare("TRUNCATE {$modx->getTableName('TicketAuthor')};")->execute();
+$modx->prepare("TRUNCATE {$modx->getTableName('comAuthor')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('modUserProfile')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('modUserGroupMember')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('haUserService')};")->execute();
@@ -18,7 +18,7 @@ $modx->prepare("TRUNCATE {$modx->getTableName('appUserName')};")->execute();
 
 // Users
 $c = $modx->newQuery('modUser'/*, ['active' => 1]*/);
-$c->innerJoin('TicketAuthor', 'AuthorProfile');
+$c->innerJoin('TicketAuthor', 'AuthorProfile', 'modUser.id = AuthorProfile.id');
 $c->select($modx->getSelectColumns('modUser', 'modUser'));
 $c->select($modx->getSelectColumns('TicketAuthor', 'AuthorProfile'));
 $c->prepare();
@@ -28,7 +28,12 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
         exit;
     }
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $composite = $modx->newObject('TicketAuthor');
+        $composite = $modx->newObject('comAuthor');
+        $row['topics'] = $row['tickets'];
+        $row['stars_topics'] = $row['stars_tickets'];
+        $row['votes_topics'] = $row['votes_tickets'];
+        $row['votes_topics_up'] = $row['votes_tickets_up'];
+        $row['votes_topics_down'] = $row['votes_tickets_down'];
         $composite->fromArray($row, '', true, true);
         $composite->save();
 

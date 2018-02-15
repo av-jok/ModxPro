@@ -36,6 +36,13 @@ return [
         'area' => 'session',
         'namespace' => 'core',
     ],
+    'container_suffix' => [
+        'key' => 'container_suffix',
+        'xtype' => 'textfield',
+        'value' => '',
+        'area' => 'furls',
+        'namespace' => 'core',
+    ],
 
     'pdotools_elements_path' => [
         'key' => 'pdotools_elements_path',

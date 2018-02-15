@@ -2,7 +2,7 @@
 
 <div class="user-content">
     <div class="d-flex flex-wrap no-gutters">
-        <div class="col12 col-md-6 pr-md-2">
+        <div class="col-12 col-md-6 pr-md-2">
             <h5>{$.en ? 'Statistics' : 'Статистика'}</h5>
             <table>
                 <tr>
@@ -23,7 +23,7 @@
                 </tr>
             </table>
         </div>
-        <div class="col12 col-md-6 pl-md-2 pt-5 pt-md-0">
+        <div class="col-12 col-md-6 pl-md-2 pt-5 pt-md-0">
             <h5>{$.en ? 'Information' : 'Информация'}</h5>
             <table>
                 {if $website}
@@ -53,7 +53,7 @@
     </div>
 
     <div class="d-flex flex-wrap no-gutters pt-5 ">
-        <div class="col12 col-md-6 pr-md-2">
+        <div class="col-12 col-md-6 pr-md-2">
             <h5>{$.en ? 'Rating' : 'Рейтинг'}</h5>
             <table>
                 <tr>
@@ -67,8 +67,8 @@
                 <tr>
                     <th>{$.en ? 'Topics rating' : 'Рейтинг заметок'}</th>
                     <td>
-                        <span class="text-success">+ {number_format($author.votes_tickets_up, 0, '.', ' ')}</span> /
-                        <span class="text-danger">- {number_format($author.votes_tickets_down, 0, '.', ' ')}</span>
+                        <span class="text-success">+ {number_format($author.votes_topics_up, 0, '.', ' ')}</span> /
+                        <span class="text-danger">- {number_format($author.votes_topics_down, 0, '.', ' ')}</span>
                     </td>
                 </tr>
                 <tr>
@@ -86,11 +86,11 @@
                 <tr>
                     <th class="pl-3">- {$.en ? 'topics' : 'заметки'}</th>
                     <td>
-                        {number_format($author.stars_tickets, 0, '.', ' ')}
+                        {number_format($author.stars_topics, 0, '.', ' ')}
                         {if $.en}
-                            {$author.stars_tickets | declension : 'time|times'}
+                            {$author.stars_topics | declension : 'time|times'}
                         {else}
-                            {$author.stars_tickets | declension : 'раз|раза|раз'}
+                            {$author.stars_topics | declension : 'раз|раза|раз'}
                         {/if}
                     </td>
                 </tr>
@@ -107,7 +107,7 @@
                 </tr>
             </table>
         </div>
-        <div class="col12 col-md-6 pl-md-2 pt-5 pt-md-0">
+        <div class="col-12 col-md-6 pl-md-2 pt-5 pt-md-0">
             {if $services}
                 <h5>{$.en ? 'Profiles' : 'Профили'}</h5>
                 <table>

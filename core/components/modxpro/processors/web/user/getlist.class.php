@@ -46,12 +46,12 @@ class UserGetListProcessor extends AppGetListProcessor
     public function prepareQueryBeforeCount(xPDOQuery $c)
     {
         $c->innerJoin('modUserProfile', 'Profile');
-        $c->innerJoin('TicketAuthor', 'AuthorProfile');
         $c->innerJoin('modUserGroupMember', 'UserGroupMembers');
+        $c->innerJoin('comAuthor', 'AuthorProfile', 'AuthorProfile.id = modUser.id');
 
         $c->select('modUser.id, modUser.username');
         $c->select('Profile.fullname as name, Profile.photo, Profile.email, Profile.work, Profile.usename');
-        $c->select('AuthorProfile.createdon, AuthorProfile.rating, AuthorProfile.tickets as topics, AuthorProfile.comments');
+        $c->select('AuthorProfile.createdon, AuthorProfile.rating, AuthorProfile.topics, AuthorProfile.comments');
         $c->select('AuthorProfile.createdon, AuthorProfile.visitedon');
 
         $c->where([
@@ -95,7 +95,8 @@ class UserGetListProcessor extends AppGetListProcessor
         $modifier = $this->Fenom->getModifier('avatar');
 
         $array['idx'] = $this->_idx++;
-        $array['avatar'] = $modifier($array, 96);
+        $array['avatar'] = $modifier($array, 48);
+        $array['avatar_retina'] = $modifier($array, 96);
         $array['link'] = !empty($array['usename'])
             ? strtolower($array['username'])
             : (int)$array['id'];

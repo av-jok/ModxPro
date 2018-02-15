@@ -4,6 +4,9 @@ $xpdo_meta_map = array (
   'xPDOSimpleObject' => 
   array (
     0 => 'appMailQueue',
+    1 => 'comTopic',
+    2 => 'comThread',
+    3 => 'comComment',
   ),
   'xPDOObject' => 
   array (
@@ -11,5 +14,10 @@ $xpdo_meta_map = array (
     1 => 'appAuthClient',
     2 => 'appAuthCode',
     3 => 'appAuthToken',
+    4 => 'comTotal',
+  ),
+  'modResource' => 
+  array (
+    0 => 'comSection',
   ),
 );

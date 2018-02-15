@@ -15,7 +15,7 @@ if ($transport->xpdo) {
                         'properties' => [
                             'cfgAllowTags' => [
                                 'name' => 'cfgAllowTags',
-                                'value' => 'kbd,a,p,div,img,i,b,u,em,strong,li,ol,ul,sup,abbr,pre,acronym,h3,h4,h5,h6,br,code,s,blockquote,table,th,tbody,tr,td,video,small',
+                                'value' => 'kbd,a,p,div,img,i,b,u,em,strong,li,ol,ul,sup,abbr,pre,acronym,h3,h4,h5,h6,cut,br,code,s,blockquote,table,th,tbody,tr,td,video,small',
                                 'type' => 'textfield',
                                 'lexicon' => 'jevix:properties',
                             ],
@@ -67,6 +67,12 @@ if ($transport->xpdo) {
                                 'type' => 'textfield',
                                 'lexicon' => 'jevix:properties',
                             ],
+                            'cfgSetTagShort' => [
+                                'name' => 'cfgSetTagShort',
+                                'value' => 'br,img,cut',
+                                'type' => 'textfield',
+                                'lexicon' => 'jevix:properties',
+                            ]
                         ],
                     ],
                 ],

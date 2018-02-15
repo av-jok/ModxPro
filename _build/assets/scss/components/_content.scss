@@ -77,6 +77,98 @@ button:not(disabled), .btn:not(disabled) {
   }
 }
 
+.thumbnails {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  li {
+    @include image;
+  }
+}
+
+.topic-content {
+  overflow: auto;
+  h2, h3, h4, h5 {
+    margin-bottom: 0;
+  }
+  img {
+    max-width: 100%;
+    &:not([align]) {
+      @include image {
+        display: block;
+        margin: auto;
+      }
+    }
+  }
+}
+.topic-meta {
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+  padding: 5px 0;
+  margin-top: 20px;
+  min-height: 50px;
+  .avatar {
+    img {
+      width: 48px;
+      border-radius: 25px;
+    }
+  }
+  .created {
+    .date {font-size: 12px;}
+    .author {
+      a { color: $gray-dark; }
+      font-weight: bold;
+    }
+  }
+  .rating {
+    span[class] { font-weight: bold; }
+  }
+}
+
+#topic-page {
+  .buttons {
+    margin-top: 1rem;
+    justify-content: normal;
+  }
+  .topic-title {
+    font-size: 2rem;
+  }
+  .topic-content {
+    margin-top: 1.5rem;
+  }
+  .topic-comments {
+    margin-top: 50px;
+  }
+}
+
+#topics-list {
+  .topic-row {
+    margin-top: 50px;
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  .topic-title {
+    font-size: 1.8rem;
+    margin: .5rem 0;
+    a { color: $gray-dark; }
+  }
+  .topic-content {
+    img { max-width: 100%; }
+  }
+  .topic-meta {
+    zoom: .9;
+  }
+  .topics-banner {
+    img {
+      width: 100%;
+      border: 1px solid #777;
+    }
+  }
+}
+
 footer {
   margin-top: 100px;
   padding-top: 10px;

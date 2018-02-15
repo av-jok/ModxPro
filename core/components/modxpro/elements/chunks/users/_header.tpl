@@ -3,10 +3,14 @@
 {var $username = $profile.usename ? $user.username : $user.id}
 <div class="user-header{if $profile.blocked} blocked{/if}" data-username="{$username}">
     <div class="avatar pr-md-3">
-        <img src="{$profile | avatar : 128}">
+        <img src="{$profile | avatar : 64}" srcset="{$profile | avatar : 128} 2x" width="64" />
     </div>
     <div class="name pt-2 pt-md-0">
         <h1>{$profile.fullname}</h1>
+        <small>
+            {$.en ? 'Since' : 'С нами с'}
+            {$author.createdon | dateago : json_encode(['dateFormat' => 'd F Y'])}
+        </small>
     </div>
     <div class="message pt-2 pt-md-0 ml-md-auto">
         {if $profile.blocked}
@@ -41,7 +45,7 @@
         </li>
         <li class="nav-item">
             <a href="{$link}/topics" class="nav-link{if $tab == 'topics'} active{/if}">
-                {'user_topics' | lexicon} <sup class="badge badge-light">{$author.tickets}</sup>
+                {'user_topics' | lexicon} <sup class="badge badge-light">{$author.topics}</sup>
             </a>
         </li>
         <li class="nav-item">

@@ -11,10 +11,12 @@
 
 <section id="content" class="container">
     <div class="content-wrapper d-flex no-gutters flex-wrap">
-        <div class="content col12 col-md-8 pr-md-3">
-            {$_modx->resource.content}
+        <div class="content col-12 col-md-8 pr-md-3">
+            {block 'content'}
+                {$_modx->resource.content}
+            {/block}
         </div>
-        <div class="sidebar col12 col-md-4 pl-md-3">
+        <div class="sidebar col-12 col-md-4 pl-md-3">
             <em>Sidebar</em>
         </div>
     </div>

@@ -10,6 +10,7 @@ if ($transport->xpdo) {
         'unauthorized_page' => '401',
         'forbidden_page' => '403',
         'error_page' => '404',
+        'blogs_id' => 'blogs',
         'service_id' => 'service',
         'users_id' => 'users',
     ];

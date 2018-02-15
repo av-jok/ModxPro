@@ -72,11 +72,11 @@ header {
             background: #f3f4f5;
             font-size: 14px;
             display: flex;
-            .avatar {
+            .avatar img {
               height: 40px;
               width: 40px;
+              border-radius: 25px;
               margin-right: 14px;
-              border-radius: 3px;
             }
             .wrapper {
               overflow: hidden;
