@@ -8,6 +8,28 @@ if (!class_exists('modObjectGetListProcessor')) {
 class AppGetListProcessor extends modObjectGetListProcessor
 {
     protected $_max_limit = 100;
+    protected $_idx = 0;
+    /** @var App */
+    public $App;
+    const tpl = '';
+
+
+    public function initialize()
+    {
+        $this->setDefaultProperties(array(
+            'start' => 0,
+            'limit' => 10,
+            'sort' => $this->defaultSortField,
+            'dir' => $this->defaultSortDirection,
+            'combo' => false,
+            'query' => '',
+        ));
+
+        $this->_idx = intval($this->getProperty('start')) + 1;
+        $this->App = $this->modx->getService('App');
+
+        return true;
+    }
 
 
     /**
@@ -26,7 +48,12 @@ class AppGetListProcessor extends modObjectGetListProcessor
 
         $c = $this->modx->newQuery($this->classKey);
         $c = $this->prepareQueryBeforeCount($c);
+
+        $tstart = microtime(true);
         $data['total'] = $this->modx->getCount($this->classKey, $c);
+        $this->modx->queryTime += microtime(true) - $tstart;
+        $this->modx->executedQueries++;
+
         $c = $this->prepareQueryAfterCount($c);
 
         $sortClassKey = $this->getSortClassKey();
@@ -41,7 +68,10 @@ class AppGetListProcessor extends modObjectGetListProcessor
         }
         //$c->prepare();$this->modx->log(1, print_r($c->toSQL(),1));
         $data['results'] = [];
+        $tstart = microtime(true);
         if ($c->prepare() && $c->stmt->execute()) {
+            $this->modx->queryTime += microtime(true) - $tstart;
+            $this->modx->executedQueries++;
             $data['results'] = $c->stmt->fetchAll(PDO::FETCH_ASSOC);
         } else {
             $this->modx->log(modX::LOG_LEVEL_ERROR,
@@ -99,6 +129,35 @@ class AppGetListProcessor extends modObjectGetListProcessor
     public function prepareArray(array $array)
     {
         return $array;
+    }
+
+
+    /**
+     * @param array $array
+     * @param bool $count
+     *
+     * @return array
+     */
+    public function outputArray(array $array, $count = false)
+    {
+        if ($count === false) {
+            $count = count($array);
+        }
+
+        $output = [
+            'success' => !empty($array),
+            'total' => $count,
+            'results' => $array,
+        ];
+
+        if (!empty($this::tpl)) {
+            $output['results'] = $this->App->pdoTools->getChunk(
+                $this->getProperty('tpl', $this::tpl),
+                array_merge($this->getProperties(), $output)
+            );
+        }
+
+        return $output;
     }
 
 }

@@ -8,7 +8,7 @@ class App
     public $pdoTools;
     public $config = [];
 
-    const assets_version = '1.10-dev';
+    const assets_version = '1.11-dev';
 
 
     /**
@@ -97,6 +97,10 @@ class App
                     'array_keys',
                     'array_values',
                 ]);
+
+                $fenom->addAccessorSmart('App', 'App', Fenom::ACCESSOR_PROPERTY);
+                $fenom->App = $this;
+
                 $fenom->addAccessorSmart('en', 'en', Fenom::ACCESSOR_PROPERTY);
                 $fenom->en = $this->modx->getOption('cultureKey') == 'en';
 

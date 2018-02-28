@@ -1,8 +1,10 @@
-<div id="topics-list">
-    {include 'file:chunks/_banner.tpl'}
+{var $res = $.App->runProcessor('community/topic/getlist', [
+    'limit' => 10,
+    'showSection' => true,
+    'where' => ['Section.alias:NOT IN' => ['help', 'work']]
+])}
 
-    {'@FILE snippets/get_topics.php' | snippet : [
-        'excludeSections' => ['help', 'work'],
-        'showSection' => true,
-    ]}
+{include 'file:chunks/_banner.tpl'}
+<div class="topics-list">
+    {$res.results}
 </div>

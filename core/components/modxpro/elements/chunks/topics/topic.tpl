@@ -25,7 +25,7 @@
     <div class="topic-content">
         {'Jevix@Typography' | snippet : ['input' => $content] | prism}
     </div>
-    {include 'file:chunks/topics/_meta.tpl'}
+    {include 'file:chunks/topics/_meta.tpl' item=$_pls user=$user}
 
     <div class="topic-comments">
         <h2>{$.en ? 'There will be comments' : 'Здесь будут комментарии'}</h2>

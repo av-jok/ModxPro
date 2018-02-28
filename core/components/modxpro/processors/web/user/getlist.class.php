@@ -10,12 +10,6 @@ class UserGetListProcessor extends AppGetListProcessor
     public $classKey = 'modUser';
     public $defaultSortField = 'rating';
     public $defaultSortDirection = 'desc';
-    /** @var App */
-    public $App;
-    /** @var FenomX $fenom */
-    public $Fenom;
-
-    protected $_idx = 0;
     protected $_max_limit = 20;
 
 
@@ -25,10 +19,6 @@ class UserGetListProcessor extends AppGetListProcessor
     public function initialize()
     {
         parent::initialize();
-        $this->App = $this->modx->getService('App');
-        $this->Fenom = $this->App->pdoTools->getFenom();
-        $this->_idx = intval($this->getProperty('start')) + 1;
-
         $sort = $this->getProperty('sort');
         if (!in_array($sort, ['name', 'comments', 'topics', 'rating'])) {
             $this->setProperty('sort', $this->defaultSortField);
@@ -92,7 +82,7 @@ class UserGetListProcessor extends AppGetListProcessor
      */
     public function prepareArray(array $array)
     {
-        $modifier = $this->Fenom->getModifier('avatar');
+        $modifier = $this->App->pdoTools->getFenom()->getModifier('avatar');
 
         $array['idx'] = $this->_idx++;
         $array['avatar'] = $modifier($array, 48);

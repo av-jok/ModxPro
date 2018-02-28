@@ -1,9 +1,11 @@
 {include 'file:chunks/users/_header.tpl' profile=$profile author=$author}
+{var $res = $.App->runProcessor('community/topic/getlist', [
+    'limit' => 10,
+    'user' => $user.id,
+])}
 
 <div class="user-content">
-    <div id="topics-list">
-        {'@FILE snippets/get_topics.php' | snippet : [
-            'where' => ['createdby' => $user.id],
-        ]}
+    <div class="topics-list">
+        {$res['results']}
     </div>
 </div>

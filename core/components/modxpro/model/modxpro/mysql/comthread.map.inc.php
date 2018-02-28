@@ -11,6 +11,7 @@ $xpdo_meta_map['comThread']= array (
   'fields' => 
   array (
     'key' => NULL,
+    'topic' => NULL,
     'createdon' => NULL,
     'createdby' => NULL,
     'closed' => NULL,
@@ -29,6 +30,14 @@ $xpdo_meta_map['comThread']= array (
       'precision' => '255',
       'phptype' => 'string',
       'null' => false,
+    ),
+    'topic' => 
+    array (
+      'dbtype' => 'int',
+      'precision' => '10',
+      'phptype' => 'integer',
+      'attributes' => 'unsigned',
+      'null' => true,
     ),
     'createdon' => 
     array (
@@ -116,6 +125,22 @@ $xpdo_meta_map['comThread']= array (
         ),
       ),
     ),
+    'topic' => 
+    array (
+      'alias' => 'topic',
+      'primary' => false,
+      'unique' => false,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'topic' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+      ),
+    ),
     'comment_last' => 
     array (
       'alias' => 'comment_last',
@@ -189,6 +214,17 @@ $xpdo_meta_map['comThread']= array (
           'class' => 'comTotal',
         ),
       ),
+    ),
+  ),
+  'aggregates' => 
+  array (
+    'Topic' => 
+    array (
+      'class' => 'comTopic',
+      'local' => 'topic',
+      'foreign' => 'id',
+      'cardinality' => 'one',
+      'owner' => 'remote',
     ),
   ),
 );

@@ -13,6 +13,7 @@ $xpdo_meta_map['comComment']= array (
     'thread' => NULL,
     'parent' => NULL,
     'text' => '',
+    'raw' => '',
     'ip' => '0.0.0.0',
     'rating' => 0,
     'rating_plus' => 0,
@@ -47,7 +48,14 @@ $xpdo_meta_map['comComment']= array (
     'text' => 
     array (
       'dbtype' => 'text',
-      'phptype' => 'text',
+      'phptype' => 'string',
+      'null' => false,
+      'default' => '',
+    ),
+    'raw' => 
+    array (
+      'dbtype' => 'text',
+      'phptype' => 'string',
       'null' => false,
       'default' => '',
     ),
@@ -143,22 +151,6 @@ $xpdo_meta_map['comComment']= array (
   ),
   'indexes' => 
   array (
-    'thread' => 
-    array (
-      'alias' => 'thread',
-      'primary' => false,
-      'unique' => false,
-      'type' => 'BTREE',
-      'columns' => 
-      array (
-        'thread' => 
-        array (
-          'length' => '',
-          'collation' => 'A',
-          'null' => false,
-        ),
-      ),
-    ),
     'parent' => 
     array (
       'alias' => 'parent',
@@ -175,38 +167,6 @@ $xpdo_meta_map['comComment']= array (
         ),
       ),
     ),
-    'deleted' => 
-    array (
-      'alias' => 'deleted',
-      'primary' => false,
-      'unique' => false,
-      'type' => 'BTREE',
-      'columns' => 
-      array (
-        'deleted' => 
-        array (
-          'length' => '',
-          'collation' => 'A',
-          'null' => false,
-        ),
-      ),
-    ),
-    'published' => 
-    array (
-      'alias' => 'published',
-      'primary' => false,
-      'unique' => false,
-      'type' => 'BTREE',
-      'columns' => 
-      array (
-        'published' => 
-        array (
-          'length' => '',
-          'collation' => 'A',
-          'null' => false,
-        ),
-      ),
-    ),
     'rating' => 
     array (
       'alias' => 'rating',
@@ -216,6 +176,78 @@ $xpdo_meta_map['comComment']= array (
       'columns' => 
       array (
         'rating' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+      ),
+    ),
+    'createdon' => 
+    array (
+      'alias' => 'createdon',
+      'primary' => false,
+      'unique' => false,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'createdon' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+      ),
+    ),
+    'thread' => 
+    array (
+      'alias' => 'thread',
+      'primary' => false,
+      'unique' => false,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'thread' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+        'deleted' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+        'published' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+      ),
+    ),
+    'user' => 
+    array (
+      'alias' => 'user',
+      'primary' => false,
+      'unique' => false,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'createdby' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+        'deleted' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+        'published' => 
         array (
           'length' => '',
           'collation' => 'A',

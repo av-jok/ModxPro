@@ -63,8 +63,8 @@
             </div>
         </div>
     </td>
-    <td class="topics"><%=topics%></td>
-    <td class="comments"><%=comments%></td>
+    <td class="topics"><a href="/users/<%=link%>/topics"><%=topics%></a></td>
+    <td class="comments"><a href="/users/<%=link%>/comments"><%=comments%></a></td>
     <td class="rating"><%=rating%></td>
 </script>
 

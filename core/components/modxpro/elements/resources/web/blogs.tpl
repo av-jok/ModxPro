@@ -1,5 +1,8 @@
-<div id="topics-list">
-    {include 'file:chunks/_banner.tpl'}
+{var $res = $.App->runProcessor('community/section/getlist', [
+    'limit' => 0,
+])}
 
-    {'@FILE snippets/get_sections.php' | snippet}
+{include 'file:chunks/_banner.tpl'}
+<div class="topics-list">
+    {$res.results}
 </div>

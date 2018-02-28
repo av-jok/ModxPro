@@ -343,12 +343,12 @@ class AppRouter
         $topic = null;
         $c = $this->modx->newQuery('comTopic', ['id' => $vars['id']]);
         $c->innerJoin('modResource', 'Section');
-        $c->innerJoin('modUserProfile', 'AuthorProfile');
+        $c->innerJoin('modUserProfile', 'UserProfile');
         $c->innerJoin('comTotal', 'Total');
         $c->select($this->modx->getSelectColumns('modResource', 'Section', 'section_', ['pagetitle', 'context_key', 'uri']));
         $c->select($this->modx->getSelectColumns('comTopic', 'comTopic', '', ['id', 'pagetitle', 'content', 'published', 'createdby', 'publishedon']));
         $c->select($this->modx->getSelectColumns('comTotal', 'Total', '', ['comments', 'views', 'stars', 'rating', 'rating_plus', 'rating_minus']));
-        $c->select($this->modx->getSelectColumns('modUserProfile', 'AuthorProfile', '', ['photo', 'email', 'fullname']));
+        $c->select($this->modx->getSelectColumns('modUserProfile', 'UserProfile', '', ['photo', 'email', 'fullname']));
         if ($c->prepare() && $c->stmt->execute()) {
             $topic = $c->stmt->fetch(PDO::FETCH_ASSOC);
         }

@@ -78,6 +78,7 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
     }
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $row['key'] = 'topic-' . $row['resource'];
+        $row['topic'] = $row['resource'];
         /** @var comThread $item */
         $item = $modx->newObject('comThread');
         $item->fromArray($row, '', true, true);

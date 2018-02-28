@@ -131,8 +131,8 @@
             <column key="pagetitle" length="" collation="A" null="false"/>
         </index>
 
-        <aggregate alias="Author" class="modUser" local="createdby" foreign="id" cardinality="one" owner="foreign"/>
-        <aggregate alias="AuthorProfile" class="modUserProfile" local="createdby" foreign="internalKey"
+        <aggregate alias="User" class="modUser" local="createdby" foreign="id" cardinality="one" owner="foreign"/>
+        <aggregate alias="UserProfile" class="modUserProfile" local="createdby" foreign="internalKey"
                    cardinality="one" owner="foreign"/>
         <aggregate alias="Section" class="modResource" local="parent" foreign="id" cardinality="one" owner="foreign"/>
         <composite alias="Thread" class="comThread" local="id" foreign="resource" cardinality="one" owner="local"/>
@@ -143,6 +143,7 @@
 
     <object class="comThread" table="app_community_threads" extends="xPDOSimpleObject">
         <field key="key" dbtype="varchar" precision="255" phptype="string" null="false"/>
+        <field key="topic" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true"/>
         <field key="createdon" dbtype="datetime" phptype="datetime" null="true"/>
         <field key="createdby" dbtype="integer" precision="10" phptype="integer" attributes="unsigned" null="false"/>
         <field key="closed" dbtype="tinyint" precision="1" phptype="boolean" attributes="unsigned" null="false"/>
@@ -159,6 +160,9 @@
         <index alias="key" name="key" primary="false" unique="true" type="BTREE">
             <column key="key" length="" collation="A" null="false"/>
         </index>
+        <index alias="topic" name="topic" primary="false" unique="false" type="BTREE">
+            <column key="topic" length="" collation="A" null="false"/>
+        </index>
         <index alias="comment_last" name="comment_last" primary="false" unique="false" type="BTREE">
             <column key="comment_last" length="" collation="A" null="false"/>
         </index>
@@ -169,6 +173,7 @@
             <column key="closed" length="" collation="A" null="false"/>
         </index>
 
+        <aggregate alias="Topic" class="comTopic" local="topic" foreign="id" cardinality="one" owner="remote"/>
         <composite alias="Comments" class="comComment" local="id" foreign="thread" cardinality="many" owner="local"/>
         <composite alias="Total" class="comTotal" local="id" foreign="id" cardinality="one" owner="local">
             <criteria target="foreign"><![CDATA[{"class":"comTotal"}]]></criteria>
@@ -179,8 +184,8 @@
         <field key="thread" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false"/>
         <field key="parent" dbtype="integer" precision="10" phptype="integer" attributes="unsigned" null="false"/>
 
-        <field key="text" dbtype="text" phptype="text" null="false" default=""/>
-        <!--<field key="raw" dbtype="text" phptype="text" null="false" default=""/>-->
+        <field key="text" dbtype="text" phptype="string" null="false" default=""/>
+        <field key="raw" dbtype="text" phptype="string" null="false" default=""/>
         <field key="ip" dbtype="varchar" precision="16" phptype="string" null="false" default="0.0.0.0"/>
         <field key="rating" dbtype="smallint" precision="5" phptype="integer" null="true" default="0"/>
         <field key="rating_plus" dbtype="smallint" precision="5" phptype="integer" null="true" default="0"/>
@@ -196,20 +201,24 @@
         <field key="deletedby" dbtype="integer" precision="10" phptype="integer" attributes="unsigned" null="false"/>
         <!--<field key="properties" dbtype="text" phptype="json" null="true"/>-->
 
-        <index alias="thread" name="thread" primary="false" unique="false" type="BTREE">
-            <column key="thread" length="" collation="A" null="false"/>
-        </index>
         <index alias="parent" name="parent" primary="false" unique="false" type="BTREE">
             <column key="parent" length="" collation="A" null="false"/>
         </index>
-        <index alias="deleted" name="deleted" primary="false" unique="false" type="BTREE">
-            <column key="deleted" length="" collation="A" null="false"/>
-        </index>
-        <index alias="published" name="published" primary="false" unique="false" type="BTREE">
-            <column key="published" length="" collation="A" null="false"/>
-        </index>
         <index alias="rating" name="rating" primary="false" unique="false" type="BTREE">
             <column key="rating" length="" collation="A" null="false"/>
+        </index>
+        <index alias="createdon" name="createdon" primary="false" unique="false" type="BTREE">
+            <column key="createdon" length="" collation="A" null="false"/>
+        </index>
+        <index alias="thread" name="thread" primary="false" unique="false" type="BTREE">
+            <column key="thread" length="" collation="A" null="false"/>
+            <column key="deleted" length="" collation="A" null="false"/>
+            <column key="published" length="" collation="A" null="false"/>
+        </index>
+        <index alias="user" name="user" primary="false" unique="false" type="BTREE">
+            <column key="createdby" length="" collation="A" null="false"/>
+            <column key="deleted" length="" collation="A" null="false"/>
+            <column key="published" length="" collation="A" null="false"/>
         </index>
 
         <aggregate alias="User" class="modUser" local="createdby" foreign="id" cardinality="one" owner="foreign"/>

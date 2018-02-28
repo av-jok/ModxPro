@@ -1,0 +1,124 @@
+.topic-content {
+  overflow: auto;
+  h2, h3, h4, h5 {
+    margin-bottom: 0;
+  }
+  img {
+    max-width: 100%;
+    &:not([align]) {
+      @include image {
+        display: block;
+        margin: auto;
+      }
+    }
+  }
+}
+
+.topic-meta {
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+  padding: 5px 0;
+  margin-top: 20px;
+  min-height: 50px;
+  .avatar {
+    img {
+      height: 48px;
+      border-radius: 25px;
+    }
+  }
+  .created {
+    .date {font-size: 12px;}
+    .author {
+      a { color: $gray-dark; }
+      font-weight: bold;
+    }
+  }
+  .rating {
+    span[class] { font-weight: bold; }
+  }
+}
+
+#topic-page {
+  .buttons {
+    margin-top: 1rem;
+    justify-content: normal;
+  }
+  .topic-title {
+    font-size: 2rem;
+  }
+  .topic-content {
+    margin-top: 1.5rem;
+  }
+  .topic-comments {
+    margin-top: 50px;
+  }
+}
+
+.topics-list {
+  .topic-row {
+    margin-top: 50px;
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  .topic-title {
+    font-size: 1.8rem;
+    margin: .5rem 0;
+    a { color: $gray-dark; }
+  }
+  .topic-content {
+    img { max-width: 100%; }
+  }
+  .topic-meta {
+    zoom: .9;
+  }
+}
+
+.comments-list {
+  .comment-row {
+    max-width: 100%;
+    overflow: auto;
+    margin-top: 50px;
+    &:first-child {
+      margin-top: 0;
+    }
+    .comment-meta {
+      .created {
+        .date {font-size: 12px;}
+        .author {
+          a { color: $gray-dark; }
+          font-weight: bold;
+        }
+      }
+      .rating {
+        span[class] { font-weight: bold; }
+      }
+    }
+    .comment-text {
+      padding: 10px 5px;
+      border: 1px solid #efefef;
+      border-radius: 5px;
+      box-shadow: #efefef 0 0 10px;
+      overflow: hidden;
+      img {
+        max-width: 100%;
+      }
+      code, pre {
+        width: 100%;
+        overflow: auto;
+      }
+    }
+    .comment-footer {
+      font-size: 12px;
+      & > div {
+        white-space: nowrap;
+      }
+    }
+    .avatar {
+      img {
+        height: 40px;
+        border-radius: 20px;
+      }
+    }
+  }
+}

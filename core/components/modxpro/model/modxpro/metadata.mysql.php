@@ -15,6 +15,7 @@ $xpdo_meta_map = array (
     2 => 'appAuthCode',
     3 => 'appAuthToken',
     4 => 'comTotal',
+    5 => 'comAuthor',
   ),
   'modResource' => 
   array (

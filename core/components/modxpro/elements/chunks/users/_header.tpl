@@ -45,17 +45,20 @@
         </li>
         <li class="nav-item">
             <a href="{$link}/topics" class="nav-link{if $tab == 'topics'} active{/if}">
-                {'user_topics' | lexicon} <sup class="badge badge-light">{$author.topics}</sup>
+                {'user_topics' | lexicon}
+                <sup class="badge badge-light">{number_format($author.topics, 0, ',', ' ')}</sup>
             </a>
         </li>
         <li class="nav-item">
             <a href="{$link}/comments" class="nav-link{if $tab == 'comments'} active{/if}">
-                {'user_comments' | lexicon} <sup class="badge badge-light">{$author.comments}</sup>
+                {'user_comments' | lexicon}
+                <sup class="badge badge-light">{number_format($author.comments, 0, ',', ' ')}</sup>
             </a>
         </li>
         <li class="nav-item">
             <a href="{$link}/favorites" class="nav-link{if $tab == 'favorites'} active{/if}">
-                {'user_favorites' | lexicon} <sup class="badge badge-light">{$author.favorites}</sup>
+                {'user_favorites' | lexicon}
+                <sup class="badge badge-light">{number_format($author.favorites, 0, ',', ' ')}</sup>
             </a>
         </li>
     </ul>

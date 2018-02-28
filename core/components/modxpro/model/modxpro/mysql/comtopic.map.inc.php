@@ -178,7 +178,7 @@ $xpdo_meta_map['comTopic']= array (
   array (
     'Thread' => 
     array (
-      'class' => 'TicketThread',
+      'class' => 'comThread',
       'local' => 'id',
       'foreign' => 'resource',
       'cardinality' => 'one',
@@ -186,7 +186,7 @@ $xpdo_meta_map['comTopic']= array (
     ),
     'Total' => 
     array (
-      'class' => 'TicketTotal',
+      'class' => 'comTotal',
       'local' => 'id',
       'foreign' => 'id',
       'cardinality' => 'one',
@@ -202,7 +202,23 @@ $xpdo_meta_map['comTopic']= array (
   ),
   'aggregates' => 
   array (
-    'Parent' => 
+    'User' => 
+    array (
+      'class' => 'modUser',
+      'local' => 'createdby',
+      'foreign' => 'id',
+      'cardinality' => 'one',
+      'owner' => 'foreign',
+    ),
+    'UserProfile' => 
+    array (
+      'class' => 'modUserProfile',
+      'local' => 'createdby',
+      'foreign' => 'internalKey',
+      'cardinality' => 'one',
+      'owner' => 'foreign',
+    ),
+    'Section' => 
     array (
       'class' => 'modResource',
       'local' => 'parent',
