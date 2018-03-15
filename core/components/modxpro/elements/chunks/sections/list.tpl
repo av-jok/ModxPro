@@ -10,6 +10,7 @@
                 {var $res = $.App->runProcessor('community/topic/getlist', [
                     'limit' => 5,
                     'fastMode' => true,
+                    'getPages' => false,
                     'where' => ['parent' => $item.id],
                     'tpl' => '@FILE chunks/sections/topics.tpl ',
                 ])}

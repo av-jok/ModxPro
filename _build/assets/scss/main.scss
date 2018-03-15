@@ -27,3 +27,9 @@ input {
     outline: none;
   }
 }
+
+@include media-breakpoint-down(sm) {
+  ul {
+    padding-left: 20px;
+  }
+}

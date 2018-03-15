@@ -1,6 +1,5 @@
 {var $res = $.App->runProcessor('community/comment/getlist', [
-    'limit' => 200,
-    'start' => 0
+    'limit' => 20,
 ])}
 
 {include 'file:chunks/_banner.tpl'}
@@ -13,4 +12,6 @@
         {/if}
     </h4>
     {$res.results}
+
+    {include 'file:chunks/_pagination.tpl' res=$res}
 </div>

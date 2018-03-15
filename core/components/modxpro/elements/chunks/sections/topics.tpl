@@ -1,5 +1,5 @@
 {foreach $results as $item}
     <li>
-        <a href="/' ~ $item.uri ~ '/{$item.id}">{$item.pagetitle}</a>
+        <a href="/{$item.section_uri}/{$item.id}">{$item.pagetitle}</a>
     </li>
 {/foreach}

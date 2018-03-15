@@ -2,7 +2,7 @@
 
 class OfficeGetFormLogin extends modProcessor
 {
-    const tpl = '@FILE chunks/office/form-login.tpl';
+    public $tpl = '@FILE chunks/office/form-login.tpl';
     const providerTpl = '@FILE chunks/office/profile/provider.tpl';
     const activeProviderTpl = '@FILE chunks/office/profile/provider-active.tpl';
 
@@ -44,7 +44,7 @@ class OfficeGetFormLogin extends modProcessor
         }
 
         return $this->success('', [
-            'html' => $App->pdoTools->getChunk($this::tpl, [
+            'html' => $App->pdoTools->getChunk($this->tpl, [
                 'providers' => $providers,
             ]),
         ]);

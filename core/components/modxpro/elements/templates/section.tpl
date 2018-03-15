@@ -14,6 +14,8 @@
         </a>
     </div>
     <div class="topics-list">
-        {$res['results']}
+        {$res.results}
+
+        {include 'file:chunks/_pagination.tpl' res=$res}
     </div>
 {/block}

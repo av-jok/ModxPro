@@ -122,3 +122,45 @@
     }
   }
 }
+
+.comments-latest, .topics-latest {
+  padding: 0 5px;
+  .comment-row, .topic-row {
+    max-width: 100%;
+    overflow: auto;
+    margin-top: 25px;
+    &:first-child {
+      margin-top: 0;
+    }
+    .avatar {
+      img {
+        height: 25px;
+        border-radius: 15px;
+      }
+    }
+    .author, .date, .meta {
+      font-size: 12px !important;
+      line-height: 14px;
+    }
+    .author a {
+      color: inherit;
+      font-weight: bold;
+    }
+    .text {
+      padding: 5px 0;
+      line-height: 18px;
+      div {
+        font-size: 14px;
+        padding-bottom: 5px;
+      }
+      font-size: 12px;
+    }
+  }
+  .link {
+    text-decoration: none;
+    color: $gray-dark;
+    &:hover {
+      color: $link-color !important;
+    }
+  }
+}

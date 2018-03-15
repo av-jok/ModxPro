@@ -13,4 +13,8 @@ return [
         'file' => 'section',
         'description' => 'Section template',
     ],
+    'ServiceTemplate' => [
+        'file' => 'service',
+        'description' => 'Service template',
+    ],
 ];

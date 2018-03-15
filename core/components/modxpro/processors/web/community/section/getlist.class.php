@@ -9,7 +9,8 @@ class SectionGetListProcessor extends AppGetListProcessor
     public $defaultSortField = 'publishedon';
     public $defaultSortDirection = 'desc';
 
-    const tpl = '@FILE chunks/sections/list.tpl';
+    public $getPages = true;
+    public $tpl = '@FILE chunks/sections/list.tpl';
 
 
     /**
@@ -28,7 +29,7 @@ class SectionGetListProcessor extends AppGetListProcessor
         ];
 
         if ($tmp = $this->getProperty('where', [])) {
-            $where = array_merge($tmp, $where);
+            $where = array_merge($where, $tmp);
         }
 
         if ($where) {

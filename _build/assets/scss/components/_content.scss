@@ -9,18 +9,10 @@
   padding-top: 30px;
   min-height: 300px;
   .content-wrapper {
-    & > .content {
-      @include media-breakpoint-up(md) {
-        border-right: 1px solid $border-color;
-      }
-      @include media-breakpoint-down(sm) {
-        margin-bottom: 10px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid $border-color;
-      }
-    }
     & > .sidebar {
-      //background-color: #efefef;
+      @include media-breakpoint-up(md) {
+        border-left: 1px solid $border-color;
+      }
     }
   }
 }

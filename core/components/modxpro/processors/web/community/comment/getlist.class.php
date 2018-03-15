@@ -9,7 +9,8 @@ class CommentGetListProcessor extends AppGetListProcessor
     public $defaultSortField = 'createdon';
     public $defaultSortDirection = 'desc';
 
-    const tpl = '@FILE chunks/comments/list.tpl';
+    public $getPages = true;
+    public $tpl = '@FILE chunks/comments/list.tpl';
 
 
     /**
@@ -26,6 +27,14 @@ class CommentGetListProcessor extends AppGetListProcessor
 
         if ($user = (int)$this->getProperty('user')) {
             $where[$this->classKey . '.createdby'] = $user;
+        } elseif ($favorites = (int)$this->getProperty('favorites')) {
+            $q = $this->modx->newQuery('comStar', ['createdby' => $favorites, 'class' => 'comComment']);
+            $tstart = microtime(true);
+            if ($q->prepare() && $q->stmt->execute()) {
+                $this->modx->queryTime += microtime(true) - $tstart;
+                $this->modx->executedQueries++;
+                $where[$this->classKey . '.id:IN'] = $q->stmt->fetchAll(PDO::FETCH_COLUMN);
+            }
         } elseif ($topic = (int)$this->getProperty('topic')) {
             // Select only comments from current topic
             $q = $this->modx->newQuery('comThread', ['topic' => $topic]);
@@ -40,8 +49,8 @@ class CommentGetListProcessor extends AppGetListProcessor
         } else {
             // Select only comments from current context
             $q = $this->modx->newQuery('comThread');
-            $q->innerJoin('comTopic', 'Topic');
-            $q->innerJoin('comSection', 'Section', 'Section.id = Topic.parent');
+            $q->leftJoin('comTopic', 'Topic');
+            $q->leftJoin('comSection', 'Section', 'Section.id = Topic.parent');
             $q->where([
                 'Section.context_key' => $this->modx->context->key,
                 'Topic.published' => true,
@@ -57,7 +66,7 @@ class CommentGetListProcessor extends AppGetListProcessor
         }
 
         if ($tmp = $this->getProperty('where', [])) {
-            $where = array_merge($tmp, $where);
+            $where = array_merge($where, $tmp);
         }
 
         if ($where) {

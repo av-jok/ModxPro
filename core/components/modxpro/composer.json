@@ -2,6 +2,7 @@
     "require": {
         "nikic/fast-route": "^1.2",
         "pelago/emogrifier": "^2.0",
-        "bshaffer/oauth2-server-php": "^1.10"
+        "bshaffer/oauth2-server-php": "^1.10",
+        "jasongrimes/paginator": "^1.0"
     }
 }

@@ -23,7 +23,7 @@
     {/if}
 
     <div class="topic-content">
-        {'Jevix@Typography' | snippet : ['input' => $content] | prism}
+        {$content | jevix | prism}
     </div>
     {include 'file:chunks/topics/_meta.tpl' item=$_pls user=$user}
 

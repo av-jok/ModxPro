@@ -211,7 +211,7 @@ $xpdo_meta_map['comThread']= array (
       array (
         'foreign' => 
         array (
-          'class' => 'comTotal',
+          'class' => 'comThread',
         ),
       ),
     ),

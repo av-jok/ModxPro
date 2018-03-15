@@ -10,6 +10,8 @@ class UserGetListProcessor extends AppGetListProcessor
     public $classKey = 'modUser';
     public $defaultSortField = 'rating';
     public $defaultSortDirection = 'desc';
+    public $getPages = true;
+
     protected $_max_limit = 20;
 
 
@@ -35,14 +37,9 @@ class UserGetListProcessor extends AppGetListProcessor
      */
     public function prepareQueryBeforeCount(xPDOQuery $c)
     {
-        $c->innerJoin('modUserProfile', 'Profile');
-        $c->innerJoin('modUserGroupMember', 'UserGroupMembers');
-        $c->innerJoin('comAuthor', 'AuthorProfile', 'AuthorProfile.id = modUser.id');
-
-        $c->select('modUser.id, modUser.username');
-        $c->select('Profile.fullname as name, Profile.photo, Profile.email, Profile.work, Profile.usename');
-        $c->select('AuthorProfile.createdon, AuthorProfile.rating, AuthorProfile.topics, AuthorProfile.comments');
-        $c->select('AuthorProfile.createdon, AuthorProfile.visitedon');
+        $c->leftJoin('modUserProfile', 'Profile');
+        $c->leftJoin('modUserGroupMember', 'UserGroupMembers');
+        $c->leftJoin('comAuthor', 'AuthorProfile', 'AuthorProfile.id = modUser.id');
 
         $c->where([
             'modUser.active' => 1,
@@ -76,6 +73,22 @@ class UserGetListProcessor extends AppGetListProcessor
 
 
     /**
+     * @param xPDOQuery $c
+     *
+     * @return xPDOQuery
+     */
+    public function prepareQueryAfterCount(xPDOQuery $c)
+    {
+        $c->select('modUser.id, modUser.username');
+        $c->select('Profile.fullname as name, Profile.photo, Profile.email, Profile.work, Profile.usename');
+        $c->select('AuthorProfile.createdon, AuthorProfile.rating, AuthorProfile.topics, AuthorProfile.comments');
+        $c->select('AuthorProfile.createdon, AuthorProfile.visitedon');
+
+        return $c;
+    }
+
+
+    /**
      * @param array $array
      *
      * @return array
@@ -84,7 +97,6 @@ class UserGetListProcessor extends AppGetListProcessor
     {
         $modifier = $this->App->pdoTools->getFenom()->getModifier('avatar');
 
-        $array['idx'] = $this->_idx++;
         $array['avatar'] = $modifier($array, 48);
         $array['avatar_retina'] = $modifier($array, 96);
         $array['link'] = !empty($array['usename'])

@@ -6,10 +6,11 @@ class TopicGetListProcessor extends AppGetListProcessor
 {
     public $objectType = 'comTopic';
     public $classKey = 'comTopic';
-    public $defaultSortField = 'publishedon';
+    public $defaultSortField = 'createdon';
     public $defaultSortDirection = 'desc';
 
-    const tpl = '@FILE chunks/topics/list.tpl';
+    public $getPages = true;
+    public $tpl = '@FILE chunks/topics/list.tpl';
 
 
     /**
@@ -19,7 +20,10 @@ class TopicGetListProcessor extends AppGetListProcessor
      */
     public function prepareQueryBeforeCount(xPDOQuery $c)
     {
-        $c->innerJoin('comSection', 'Section');
+        $c->leftJoin('comSection', 'Section');
+        if (!$this->getProperty('fastMode')) {
+            $c->leftJoin('comTotal', 'Total', 'Total.id = comTopic.id AND Total.class = "comTopic"');
+        }
 
         $where = [
             $this->classKey . '.published' => true,
@@ -27,12 +31,20 @@ class TopicGetListProcessor extends AppGetListProcessor
         ];
         if ($user = (int)$this->getProperty('user')) {
             $where[$this->classKey . '.createdby'] = $user;
+        } elseif ($favorites = (int)$this->getProperty('favorites')) {
+            $q = $this->modx->newQuery('comStar', ['createdby' => $favorites, 'class' => 'comTopic']);
+            $tstart = microtime(true);
+            if ($q->prepare() && $q->stmt->execute()) {
+                $this->modx->queryTime += microtime(true) - $tstart;
+                $this->modx->executedQueries++;
+                $where[$this->classKey . '.id:IN'] = $q->stmt->fetchAll(PDO::FETCH_COLUMN);
+            }
         } else {
             $where['Section.context_key'] = $this->modx->context->key;
         }
 
         if ($tmp = $this->getProperty('where', [])) {
-            $where = array_merge($tmp, $where);
+            $where = array_merge($where, $tmp);
         }
 
         if ($where) {
@@ -63,13 +75,12 @@ class TopicGetListProcessor extends AppGetListProcessor
      */
     public function prepareQueryAfterCount(xPDOQuery $c)
     {
-        $c->select('comTopic.id, comTopic.pagetitle, comTopic.introtext, comTopic.createdby, comTopic.publishedon');
+        $c->select('comTopic.id, comTopic.pagetitle, comTopic.introtext, comTopic.createdby, comTopic.createdon');
+        $c->select($this->modx->getSelectColumns('comSection', 'Section', 'section_', ['pagetitle', 'context_key', 'uri']));
         if (!$this->getProperty('fastMode')) {
-            $c->leftJoin('comTotal', 'Total', 'Total.id = comTopic.id AND Total.class = "comTopic"');
             $c->leftJoin('modUser', 'User');
             $c->leftJoin('modUserProfile', 'UserProfile');
 
-            $c->select($this->modx->getSelectColumns('comSection', 'Section', 'section_', ['pagetitle', 'context_key', 'uri']));
             $c->select('Total.comments, Total.views, Total.stars, Total.rating, Total.rating_plus, Total.rating_minus');
             $c->select('User.username');
             $c->select('UserProfile.photo, UserProfile.email, UserProfile.fullname, UserProfile.usename');

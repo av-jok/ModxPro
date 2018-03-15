@@ -2,7 +2,7 @@
 
 class UserMessageGet extends modProcessor
 {
-    const tpl = '@FILE chunks/users/_message.tpl';
+    public $tpl = '@FILE chunks/users/_message.tpl';
     /** @var App $App */
     public $App;
 
@@ -44,7 +44,7 @@ class UserMessageGet extends modProcessor
             }
 
             return $this->success('', [
-                'html' => $this->App->pdoTools->getChunk(self::tpl, [
+                'html' => $this->App->pdoTools->getChunk($this->tpl, [
                     'id' => $user->id,
                     'to' => $user->Profile->fullname,
                 ]),

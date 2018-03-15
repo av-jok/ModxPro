@@ -2,7 +2,7 @@
 
 class UserMessageSubmit extends modProcessor
 {
-    const tpl = '@FILE chunks/email/users/message.tpl';
+    public $tpl = '@FILE chunks/email/users/message.tpl';
     /** @var App $App */
     public $App;
 
@@ -57,7 +57,7 @@ class UserMessageSubmit extends modProcessor
         $sent = $this->App->sendEmail(
             $profile->email,
             $subject,
-            $this->App->pdoTools->getChunk(self::tpl, [
+            $this->App->pdoTools->getChunk($this->tpl, [
                 'text' => $body,
                 'user' => $this->modx->user->toArray(),
                 'profile' => $this->modx->user->Profile->toArray(),

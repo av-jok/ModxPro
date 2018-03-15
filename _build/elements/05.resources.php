@@ -132,22 +132,26 @@ return [
             'resources' => [
                 'search' => [
                     'pagetitle' => 'Поиск',
+                    'template' => 4,
                     'hidemenu' => true,
                     'uri' => 'search',
                     'uri_override' => true,
                 ],
                 '401' => [
                     'pagetitle' => '401 - Требуется авторизация',
+                    'template' => 4,
                     'hidemenu' => true,
                     'uri' => '401',
                 ],
                 '403' => [
                     'pagetitle' => '403 - Доступ запрещён',
+                    'template' => 4,
                     'hidemenu' => true,
                     'uri' => '403',
                 ],
                 '404' => [
                     'pagetitle' => '404 - Страница не найдена',
+                    'template' => 4,
                     'hidemenu' => true,
                     'uri' => '404',
                 ],
@@ -310,21 +314,25 @@ return [
                 'search' => [
                     'pagetitle' => 'Search',
                     'hidemenu' => true,
+                    'template' => 4,
                     'uri' => 'search',
                     'uri_override' => true,
                 ],
                 '401' => [
                     'pagetitle' => '401 - Authorization required',
+                    'template' => 4,
                     'hidemenu' => true,
                     'uri' => '401',
                 ],
                 '403' => [
                     'pagetitle' => '403 - Access denied',
+                    'template' => 4,
                     'hidemenu' => true,
                     'uri' => '403',
                 ],
                 '404' => [
                     'pagetitle' => '404 - Page not found',
+                    'template' => 4,
                     'hidemenu' => true,
                     'uri' => '404',
                 ],

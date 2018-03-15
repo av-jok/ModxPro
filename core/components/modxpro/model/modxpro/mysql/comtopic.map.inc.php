@@ -24,6 +24,7 @@ $xpdo_meta_map['comTopic']= array (
     'deleted' => 0,
     'deletedon' => NULL,
     'deletedby' => 0,
+    'important' => 0,
     'properties' => NULL,
   ),
   'fieldMeta' => 
@@ -132,6 +133,14 @@ $xpdo_meta_map['comTopic']= array (
       'null' => true,
       'default' => 0,
     ),
+    'important' => 
+    array (
+      'dbtype' => 'tinyint',
+      'precision' => '1',
+      'phptype' => 'boolean',
+      'null' => true,
+      'default' => 0,
+    ),
     'properties' => 
     array (
       'dbtype' => 'text',
@@ -190,6 +199,21 @@ $xpdo_meta_map['comTopic']= array (
       'local' => 'id',
       'foreign' => 'id',
       'cardinality' => 'one',
+      'owner' => 'local',
+      'criteria' => 
+      array (
+        'foreign' => 
+        array (
+          'class' => 'comTopic',
+        ),
+      ),
+    ),
+    'Stars' => 
+    array (
+      'class' => 'comStar',
+      'local' => 'id',
+      'foreign' => 'id',
+      'cardinality' => 'many',
       'owner' => 'local',
       'criteria' => 
       array (

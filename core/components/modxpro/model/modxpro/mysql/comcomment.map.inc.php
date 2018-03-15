@@ -273,6 +273,21 @@ $xpdo_meta_map['comComment']= array (
         ),
       ),
     ),
+    'Stars' => 
+    array (
+      'class' => 'comStar',
+      'local' => 'id',
+      'foreign' => 'id',
+      'cardinality' => 'one',
+      'owner' => 'local',
+      'criteria' => 
+      array (
+        'foreign' => 
+        array (
+          'class' => 'comComment',
+        ),
+      ),
+    ),
   ),
   'aggregates' => 
   array (

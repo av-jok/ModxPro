@@ -22,7 +22,7 @@ gulp.task('css', function () {
     var dst = assets + 'css/web/';
     gulp.src(src)
         .pipe(sass().on('error', sass.logError))
-        .pipe(cssmin())
+        .pipe(cssmin().on('error', function(e){console.log(e)}))
         .pipe(gulp.dest(dst));
 });
 

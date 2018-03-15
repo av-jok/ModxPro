@@ -122,6 +122,7 @@
         <field key="deleted" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="0"/>
         <field key="deletedon" dbtype="datetime" phptype="datetime" null="true"/>
         <field key="deletedby" dbtype="int" precision="10" phptype="int" attributes="unsigned" null="true" default="0"/>
+        <field key="important" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="0"/>
         <field key="properties" dbtype="text" phptype="json" null="true"/>
 
         <index alias="parent" name="parent" primary="false" unique="false" type="BTREE">
@@ -137,6 +138,9 @@
         <aggregate alias="Section" class="modResource" local="parent" foreign="id" cardinality="one" owner="foreign"/>
         <composite alias="Thread" class="comThread" local="id" foreign="resource" cardinality="one" owner="local"/>
         <composite alias="Total" class="comTotal" local="id" foreign="id" cardinality="one" owner="local">
+            <criteria target="foreign"><![CDATA[{"class":"comTopic"}]]></criteria>
+        </composite>
+        <composite alias="Stars" class="comStar" local="id" foreign="id" cardinality="many" owner="local">
             <criteria target="foreign"><![CDATA[{"class":"comTopic"}]]></criteria>
         </composite>
     </object>
@@ -176,7 +180,7 @@
         <aggregate alias="Topic" class="comTopic" local="topic" foreign="id" cardinality="one" owner="remote"/>
         <composite alias="Comments" class="comComment" local="id" foreign="thread" cardinality="many" owner="local"/>
         <composite alias="Total" class="comTotal" local="id" foreign="id" cardinality="one" owner="local">
-            <criteria target="foreign"><![CDATA[{"class":"comTotal"}]]></criteria>
+            <criteria target="foreign"><![CDATA[{"class":"comThread"}]]></criteria>
         </composite>
     </object>
 
@@ -233,6 +237,9 @@
         </composite>
         -->
         <composite alias="Total" class="comTotal" local="id" foreign="id" cardinality="one" owner="local">
+            <criteria target="foreign"><![CDATA[{"class":"comComment"}]]></criteria>
+        </composite>
+        <composite alias="Stars" class="comStar" local="id" foreign="id" cardinality="one" owner="local">
             <criteria target="foreign"><![CDATA[{"class":"comComment"}]]></criteria>
         </composite>
     </object>
@@ -343,6 +350,27 @@
         <aggregate alias="User" class="modUser" local="id" foreign="id" cardinality="one" owner="foreign"/>
         <aggregate alias="UserProfile" class="modUserProfile" local="id" foreign="internalKey" cardinality="one"
                    owner="foreign"/>
+    </object>
+
+    <object class="comStar" table="app_community_stars" extends="xPDOObject">
+        <field key="id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" index="pk"/>
+        <field key="class" dbtype="varchar" precision="100" phptype="string" null="false" index="pk"/>
+        <field key="owner" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false"/>
+
+        <field key="createdon" dbtype="datetime" phptype="datetime" null="true" index="index"/>
+        <field key="createdby" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" index="pk"/>
+
+        <index alias="PRIMARY" name="PRIMARY" primary="true" unique="true" type="BTREE">
+            <column key="id" length="" collation="A" null="false"/>
+            <column key="createdby" length="" collation="A" null="false"/>
+            <column key="class" length="" collation="A" null="false"/>
+        </index>
+        <index alias="createdon" name="createdon" primary="false" unique="false" type="BTREE">
+            <column key="createdon" length="" collation="A" null="false"/>
+        </index>
+        <index alias="owner" name="owner" primary="false" unique="false" type="BTREE">
+            <column key="owner" length="" collation="A" null="false"/>
+        </index>
     </object>
 
 </model>

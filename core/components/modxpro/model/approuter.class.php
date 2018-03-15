@@ -170,11 +170,16 @@ class AppRouter
         // Prepare data
         $author = $this->modx->getObject('comAuthor', $user->id);
         $data = [
+            'subpage' => $vars['subpage'],
             'user' => $user->get(['id', 'username', 'external_key']),
             'profile' => $user->Profile->get(['fullname', 'email', 'photo', 'blocked', 'extended', 'comment', 'website', 'city', 'feedback', 'usename']),
             'author' => $author->toArray(),
         ];
-        $data['author']['favorites'] = $this->modx->getCount('TicketStar', ['createdby' => $user->id]);
+        $data['author']['favorites'] = $this->modx->getCount('comStar', ['createdby' => $user->id]);
+        if ($user->id == $this->modx->user->id) {
+            $data['author']['drafts'] = $this->modx->getCount('comTopic', ['createdby' => $user->id, 'published' => false]);
+            $data['author']['topics'] += $data['author']['drafts'];
+        }
         $data['tab'] = !empty($vars['page'])
             ? $vars['page']
             : 'info';
@@ -189,6 +194,8 @@ class AppRouter
                 break;
             case 'favorites':
                 $title[] = $this->modx->lexicon('user_favorites');
+                $data['author']['favorite_topics'] = $this->modx->getCount('comStar', ['createdby' => $user->id, 'class' => 'comTopic']);
+                $data['author']['favorite_comments'] = $this->modx->getCount('comStar', ['createdby' => $user->id, 'class' => 'comComment']);
                 break;
             default:
                 if (!empty($data['profile']['website'])) {
@@ -385,8 +392,7 @@ class AppRouter
 
     public function editTopic($vars)
     {
-        print_r($vars);
-        die;
+        //print_r($vars);die;
     }
 
 }

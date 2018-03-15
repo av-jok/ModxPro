@@ -11,11 +11,11 @@
                 <div class="author">
                     <a href="/users/{$item.usename ? $item.username : $item.createdby}">{$item.fullname}</a>
                 </div>
-                <div class="date">{$item.publishedon | dateago}</div>
+                <div class="date">{$item.createdon | dateago}</div>
             </div>
         {else}
             <div class="date">
-                <i class="far fa-calendar-alt"></i> {$item.publishedon | dateago}
+                <i class="far fa-calendar-alt"></i> {$item.createdon | dateago}
             </div>
         {/if}
     </div>
@@ -27,7 +27,9 @@
             <i class="far fa-eye"></i> {$item.views}
         </div>
         <div class="comments ml-md-3">
-            <i class="far fa-comment"></i> {$item.comments}
+            {if $item.section_uri != 'work'}
+                <i class="far fa-comment"></i> {$item.comments}
+            {/if}
         </div>
         <div class="rating ml-md-5">
             <i class="far fa-arrow-up"></i>

@@ -15,13 +15,13 @@ if ($transport->xpdo) {
                         'properties' => [
                             'cfgAllowTags' => [
                                 'name' => 'cfgAllowTags',
-                                'value' => 'kbd,a,p,div,img,i,b,u,em,strong,li,ol,ul,sup,abbr,pre,acronym,h3,h4,h5,h6,cut,br,code,s,blockquote,table,th,tbody,tr,td,video,small',
+                                'value' => 'kbd,a,img,i,b,u,em,strong,li,ol,ul,sup,abbr,pre,acronym,h3,h4,h5,h6,br,code,s,blockquote,table,th,tbody,tr,td,video,small',
                                 'type' => 'textfield',
                                 'lexicon' => 'jevix:properties',
                             ],
                             'cfgAllowTagParams' => [
                                 'name' => 'cfgAllowTagParams',
-                                'value' => '{"p":{"0":"class"},"ul":{"0":"class"},"table":{"0":"class"},"div":{"0":"class"},"a":["title","href","rel"],"img":{"0":"src","alt":"#text","1":"title","2":"class","align":["right","left","center"],"width":"#int","height":"#int"}}',
+                                'value' => '{"ul":{"0":"class"},"table":{"0":"class"},"a":["title","href","rel"],"img":{"0":"src","alt":"#text","1":"title","2":"class","align":["right","left","center"],"width":"#int","height":"#int"}}',
                                 'type' => 'textfield',
                                 'lexicon' => 'jevix:properties',
                             ],
@@ -39,7 +39,7 @@ if ($transport->xpdo) {
                             ],
                             'cfgSetAutoPregReplace' => [
                                 'name' => 'cfgSetAutoPregReplace',
-                                'value' => '[["\/<video>(http|https):\\\\\/\\\\\/(?:www\\\\.|)youtube\\\\.com\\\\\/watch\\\\?v=([a-zA-Z0-9_\\\\-]+)(&.+)?<\\\\\/video>\/Ui","\/<video>(http|https):\\\\\/\\\\\/(?:www\\\\.|)youtu\\\\.be\\\\\/([a-zA-Z0-9_\\\\-]+)(&.+)?<\\\\\/video>\/Ui"],["<div class=\"embed-responsive embed-responsive-16by9\"><iframe src=\"https:\/\/www.youtube.com\/embed\/$2\" allowfullscreen><\/iframe><\/div>","<div class=\"embed-responsive embed-responsive-16by9\"><iframe src=\"https:\/\/www.youtube.com\/embed\/$2\" allowfullscreen><\/iframe><\/div>"]]',
+                                'value' => '[["#<cut\\/>#","#(<br>){3,}#","#<video>(http|https):\\\\\/\\\\\/(?:www\\\\.|)youtube\\\\.com\\\\\/watch\\\\?v=([a-zA-Z0-9_\\\\-]+)(&.+)?<\\\\\/video>#Ui","#<video>(http|https):\\\\\/\\\\\/(?:www\\\\.|)youtu\\\\.be\\\\\/([a-zA-Z0-9_\\\\-]+)(&.+)?<\\\\\/video>#Ui"],["","<br><br>","<div class=\"embed-responsive embed-responsive-16by9\"><iframe src=\"https:\/\/www.youtube.com\/embed\/$2\" allowfullscreen><\/iframe><\/div>","<div class=\"embed-responsive embed-responsive-16by9\"><iframe src=\"https:\/\/www.youtube.com\/embed\/$2\" allowfullscreen><\/iframe><\/div>"]]',
                                 'type' => 'textfield',
                                 'lexicon' => 'jevix:properties',
                             ],
@@ -51,7 +51,7 @@ if ($transport->xpdo) {
                             ),
                             'cfgSetTagChilds' => array(
                                 'name' => 'cfgSetTagChilds',
-                                'value' => '[["ul",["li"],false,true],["ol",["li"],false,true],["table",["tr"],false,true],["tr",["td","th"],false,true],["div",["table"],false,true]]',
+                                'value' => '[["ul",["li"],false,true],["ol",["li"],false,true],["table",["tr"],false,true],["tr",["td","th"],false,true]]',
                                 'type' => 'textfield',
                                 'lexicon' => 'jevix:properties',
                             ),
@@ -69,7 +69,7 @@ if ($transport->xpdo) {
                             ],
                             'cfgSetTagShort' => [
                                 'name' => 'cfgSetTagShort',
-                                'value' => 'br,img,cut',
+                                'value' => 'br,img',
                                 'type' => 'textfield',
                                 'lexicon' => 'jevix:properties',
                             ]

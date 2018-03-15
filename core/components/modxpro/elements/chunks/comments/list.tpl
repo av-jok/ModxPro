@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="comment-text mt-2">
-                {$item.text | prism}
+                {$item.text | escape | prism}
             </div>
             <div class="comment-footer mt-2 d-flex flex-wrap justify-content-center justify-content-md-start">
                 <div>
@@ -62,7 +62,7 @@
                 <div class="ml-2 mr-2">/</div>
                 <div>
                     <a href="/{$item.uri}/{$item.topic}">
-                        {$item.topic_title | truncate : 30}
+                        {$item.topic_title}
                     </a>&nbsp;&nbsp;<i class="far fa-comment"></i> {$item.comments}
                 </div>
             </div>

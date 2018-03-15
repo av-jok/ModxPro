@@ -1,32 +1,87 @@
 <?php
+
+
 if (!class_exists('modObjectGetListProcessor')) {
     /** @noinspection PhpIncludeInspection */
     require_once MODX_CORE_PATH . 'model/modx/modprocessor.class.php';
 }
 
+use JasonGrimes\Paginator;
 
 class AppGetListProcessor extends modObjectGetListProcessor
 {
-    protected $_max_limit = 100;
-    protected $_idx = 0;
     /** @var App */
     public $App;
-    const tpl = '';
+    public $getPages = false;
+    public $tpl = '';
+
+    protected $_max_limit = 100;
+    protected $_page = 0;
 
 
+    /**
+     * @return bool
+     */
     public function initialize()
     {
-        $this->setDefaultProperties(array(
-            'start' => 0,
-            'limit' => 10,
+        $this->App = $this->modx->getService('App');
+        if ($tpl = $this->getProperty('tpl')) {
+            $this->tpl = $tpl;
+        }
+        $getPages = $this->getProperty('getPages');
+        if ($getPages !== null) {
+            $this->getPages = $getPages;
+        }
+
+        $limit = $this->getProperty('limit', 10);
+        $start = 0;
+        if ($this->getPages && !empty($_REQUEST['page'])) {
+            $this->_page = (int)$_REQUEST['page'];
+            if ($this->_page > 1) {
+                $start = ($this->_page * $limit) - $limit;
+            }
+        }
+        $this->setDefaultProperties([
+            'start' => $start,
+            'limit' => $limit,
             'sort' => $this->defaultSortField,
             'dir' => $this->defaultSortDirection,
             'combo' => false,
             'query' => '',
-        ));
+        ]);
 
-        $this->_idx = intval($this->getProperty('start')) + 1;
-        $this->App = $this->modx->getService('App');
+        return true;
+    }
+
+
+    /**
+     * @return array|mixed|string
+     */
+    public function process()
+    {
+        $check = $this->checkRequest();
+
+        return $check !== true
+            ? $check
+            : parent::process();
+    }
+
+
+    public function checkRequest()
+    {
+        $request = $_REQUEST;
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+        if (!$isAjax && !empty($request['page']) && $request['page'] == 1) {
+            unset($_GET['page'], $_GET['q']);
+            $url = preg_replace('#\?.*#', '', $_SERVER['REQUEST_URI']);
+            if (!empty($_GET)) {
+                $url .= '?' . http_build_query($_GET);
+            }
+
+            return $this->failure('', [
+                'redirect' => $url,
+            ]);
+        }
 
         return true;
     }
@@ -49,10 +104,14 @@ class AppGetListProcessor extends modObjectGetListProcessor
         $c = $this->modx->newQuery($this->classKey);
         $c = $this->prepareQueryBeforeCount($c);
 
-        $tstart = microtime(true);
-        $data['total'] = $this->modx->getCount($this->classKey, $c);
-        $this->modx->queryTime += microtime(true) - $tstart;
-        $this->modx->executedQueries++;
+        if ($this->getPages) {
+            $tstart = microtime(true);
+            $data['total'] = $this->modx->getCount($this->classKey, $c);
+            $this->modx->queryTime += microtime(true) - $tstart;
+            $this->modx->executedQueries++;
+        } else {
+            $data['total'] = false;
+        }
 
         $c = $this->prepareQueryAfterCount($c);
 
@@ -87,7 +146,7 @@ class AppGetListProcessor extends modObjectGetListProcessor
      *
      * @return xPDOQuery
      */
-    public function prepareQueryBeforeCount(xPDOQuery $c)
+    public function prepareQueryAfterCount(xPDOQuery $c)
     {
         $c->select($this->modx->getSelectColumns($this->classKey, $this->classKey));
 
@@ -106,13 +165,14 @@ class AppGetListProcessor extends modObjectGetListProcessor
     {
         $list = [];
         $list = $this->beforeIteration($list);
-        $this->currentIndex = 0;
+        $this->currentIndex = intval($this->getProperty('start')) + 1;
+
         /** @var xPDOObject|modAccessibleObject $object */
         foreach ($data['results'] as $array) {
             $array = $this->prepareArray($array);
             if (!empty($array) && is_array($array)) {
+                $array['idx'] = $this->currentIndex++;
                 $list[] = $array;
-                $this->currentIndex++;
             }
         }
         $list = $this->afterIteration($list);
@@ -150,11 +210,17 @@ class AppGetListProcessor extends modObjectGetListProcessor
             'results' => $array,
         ];
 
-        if (!empty($this::tpl)) {
+        if ($this->tpl) {
             $output['results'] = $this->App->pdoTools->getChunk(
-                $this->getProperty('tpl', $this::tpl),
+                $this->getProperty('tpl', $this->tpl),
                 array_merge($this->getProperties(), $output)
             );
+        }
+
+        if ($this->getPages) {
+            $limit = $this->getProperty('limit');
+            $paginator = new Paginator($count, $limit, $this->_page, '?page=(:num)');
+            $output['pages'] = $paginator->getPages();
         }
 
         return $output;

@@ -131,7 +131,7 @@
     {if $profile.comment}
         <div class="comment pt-5">
             <h5>{$.en ? 'About' : 'О себе'}</h5>
-            <p>{'Jevix@comment' | snippet : ['input' => $profile.comment]}</p>
+            <p>{$profile.comment | jevix}</p>
         </div>
     {/if}
 </div>

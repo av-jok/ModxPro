@@ -8,7 +8,7 @@ class App
     public $pdoTools;
     public $config = [];
 
-    const assets_version = '1.11-dev';
+    const assets_version = '1.13-dev';
 
 
     /**
@@ -92,6 +92,7 @@ class App
         switch ($event->name) {
             case 'pdoToolsOnFenomInit':
                 $modx = $this->modx;
+                $pdo = $this->pdoTools;
                 /** @var Fenom|FenomX $fenom */
                 $fenom->addAllowedFunctions([
                     'array_keys',
@@ -182,6 +183,22 @@ class App
                     }
 
                     return $input;
+                });
+
+                $fenom->addModifier('jevix', function ($input) use ($pdo) {
+                    $output = $pdo->runSnippet('Jevix@Typography', [
+                        'input' => $input,
+                    ]);
+
+                    $output = preg_replace("#(<br>\r\n){3,}#", '<br><br>', $output);
+
+                    return $output;
+                });
+
+                $fenom->addModifier('escape', function ($input) use ($pdo) {
+                    $output = str_replace(['[', ']', '{', '}'], ['&#91;', '&#93;', '&#123;', '&#125;'], $input);
+
+                    return $output;
                 });
                 break;
 

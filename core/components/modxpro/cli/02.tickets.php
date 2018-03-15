@@ -31,13 +31,14 @@ $modx->prepare("TRUNCATE {$modx->getTableName('comTopic')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('comTotal')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('comThread')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('comComment')};")->execute();
+$modx->prepare("TRUNCATE {$modx->getTableName('comStar')};")->execute();
 
 // Tickets
 $c = $modx->newQuery('modResource', ['class_key' => 'Ticket']);
 $c->innerJoin('modResource', 'Parent');
 $c->leftJoin('modTemplateVarResource', 'Status', 'Status.contentid = modResource.id AND Status.tmplvarid = 6');
 $c->select($modx->getSelectColumns('modResource', 'modResource', '', ['id', 'pagetitle', 'introtext', 'content', 'createdon', 'createdby', 'published', 'publishedon', 'publishedby', 'deleted', 'editedby', 'editedon', 'deletedon', 'deletedby', 'context_key']));
-$c->select('Parent.alias as parent, Status.value as status');
+$c->select('Parent.alias as parent, Status.value as status, modResource.show_on_start, modResource.hide_on_start');
 $c->prepare();
 if ($stmt = $pdo->prepare($c->toSQL())) {
     if (!$stmt->execute()) {
@@ -55,6 +56,11 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
         $row['pagetitle'] = trim($row['pagetitle']);
         $row['introtext'] = trim($row['introtext']);
         $row['content'] = trim($row['content']);
+        if ($row['hide_on_start']) {
+            $row['important'] = -1;
+        } elseif ($row['show_on_start']) {
+            $row['important'] = 1;
+        }
 
         /** @var comTopic $item */
         $item = $modx->newObject('comTopic');
@@ -144,6 +150,29 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
 
         /** @var comTotal $item */
         $item = $modx->newObject('comTotal');
+        $item->fromArray($row, '', true, true);
+        $item->save();
+    }
+}
+
+// Stars
+$c = $modx->newQuery('TicketStar');
+$c->select($modx->getSelectColumns('TicketStar', 'TicketStar'));
+$c->prepare();
+if ($stmt = $pdo->prepare($c->toSQL())) {
+    if (!$stmt->execute()) {
+        print_r($stmt->errorInfo());
+        exit;
+    }
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if ($row['class'] == 'Ticket') {
+            $row['class'] = 'comTopic';
+        } elseif ($row['class'] == 'TicketComment') {
+            $row['class'] = 'comComment';
+        }
+
+        /** @var comStar $item */
+        $item = $modx->newObject('comStar');
         $item->fromArray($row, '', true, true);
         $item->save();
     }
