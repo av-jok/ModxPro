@@ -182,6 +182,38 @@ $xpdo_meta_map['comTopic']= array (
         ),
       ),
     ),
+    'createdon' => 
+    array (
+      'alias' => 'createdon',
+      'primary' => false,
+      'unique' => false,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'createdon' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+      ),
+    ),
+    'published' => 
+    array (
+      'alias' => 'published',
+      'primary' => false,
+      'unique' => false,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'published' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+      ),
+    ),
   ),
   'composites' => 
   array (
@@ -189,8 +221,16 @@ $xpdo_meta_map['comTopic']= array (
     array (
       'class' => 'comThread',
       'local' => 'id',
-      'foreign' => 'resource',
+      'foreign' => 'topic',
       'cardinality' => 'one',
+      'owner' => 'local',
+    ),
+    'Views' => 
+    array (
+      'class' => 'comView',
+      'local' => 'id',
+      'foreign' => 'topic_id',
+      'cardinality' => 'many',
       'owner' => 'local',
     ),
     'Total' => 

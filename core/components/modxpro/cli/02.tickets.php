@@ -26,12 +26,14 @@ if ($c->prepare() && $c->stmt->execute()) {
     }
 }
 
+
 //$modx->prepare("TRUNCATE {$modx->getTableName('comSection')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('comTopic')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('comTotal')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('comThread')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('comComment')};")->execute();
 $modx->prepare("TRUNCATE {$modx->getTableName('comStar')};")->execute();
+$modx->prepare("TRUNCATE {$modx->getTableName('comView')};")->execute();
 
 // Tickets
 $c = $modx->newQuery('modResource', ['class_key' => 'Ticket']);
@@ -94,7 +96,7 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
 
 // Comments
 $c = $modx->newQuery('TicketComment');
-$c->select($modx->getSelectColumns('TicketComment', 'TicketComment'));
+$c->select($modx->getSelectColumns('TicketComment', 'TicketComment', '', ['published'], true));
 $c->prepare();
 if ($stmt = $pdo->prepare($c->toSQL())) {
     if (!$stmt->execute()) {
@@ -177,3 +179,30 @@ if ($stmt = $pdo->prepare($c->toSQL())) {
         $item->save();
     }
 }
+
+// Views
+$limit = 100000;
+$offset = 0;
+while (true) {
+    $c = $modx->newQuery('TicketView', ['guest_key' => '']);
+    $c->select('`parent`,`uid`,`timestamp`');
+    $c->limit($limit, $offset);
+    $c->prepare();
+    if ($stmt = $pdo->prepare($c->toSQL())) {
+        if (!$stmt->execute()) {
+            print_r($stmt->errorInfo());
+            exit;
+        }
+        $q = $modx->prepare("INSERT INTO {$modx->getTableName('comView')} (`topic_id`,`user_id`,`timestamp`) VALUES (:parent,:uid,:timestamp);");
+        $i = 0;
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $q->execute($row);
+            $i++;
+        }
+        if (!$row && !$i) {
+            break;
+        }
+    }
+    $offset += $limit;
+}
+unset($offset, $limit, $i);

@@ -131,12 +131,19 @@
         <index alias="pagetitle" name="pagetitle" primary="false" unique="false" type="BTREE">
             <column key="pagetitle" length="" collation="A" null="false"/>
         </index>
+        <index alias="createdon" name="createdon" primary="false" unique="false" type="BTREE">
+            <column key="createdon" length="" collation="A" null="false"/>
+        </index>
+        <index alias="published" name="published" primary="false" unique="false" type="BTREE">
+            <column key="published" length="" collation="A" null="false"/>
+        </index>
 
         <aggregate alias="User" class="modUser" local="createdby" foreign="id" cardinality="one" owner="foreign"/>
         <aggregate alias="UserProfile" class="modUserProfile" local="createdby" foreign="internalKey"
                    cardinality="one" owner="foreign"/>
         <aggregate alias="Section" class="modResource" local="parent" foreign="id" cardinality="one" owner="foreign"/>
-        <composite alias="Thread" class="comThread" local="id" foreign="resource" cardinality="one" owner="local"/>
+        <composite alias="Thread" class="comThread" local="id" foreign="topic" cardinality="one" owner="local"/>
+        <composite alias="Views" class="comView" local="id" foreign="topic_id" cardinality="many" owner="local"/>
         <composite alias="Total" class="comTotal" local="id" foreign="id" cardinality="one" owner="local">
             <criteria target="foreign"><![CDATA[{"class":"comTopic"}]]></criteria>
         </composite>
@@ -199,7 +206,6 @@
         <field key="createdby" dbtype="integer" precision="10" phptype="integer" attributes="unsigned" null="false"/>
         <field key="editedon" dbtype="datetime" phptype="datetime" null="true"/>
         <field key="editedby" dbtype="integer" precision="10" phptype="integer" attributes="unsigned" null="false"/>
-        <field key="published" dbtype="tinyint" precision="1" phptype="boolean" null="false"/>
         <field key="deleted" dbtype="tinyint" precision="1" phptype="boolean" null="false" default="0"/>
         <field key="deletedon" dbtype="datetime" phptype="datetime" null="true"/>
         <field key="deletedby" dbtype="integer" precision="10" phptype="integer" attributes="unsigned" null="false"/>
@@ -216,13 +222,15 @@
         </index>
         <index alias="thread" name="thread" primary="false" unique="false" type="BTREE">
             <column key="thread" length="" collation="A" null="false"/>
-            <column key="deleted" length="" collation="A" null="false"/>
-            <column key="published" length="" collation="A" null="false"/>
         </index>
         <index alias="user" name="user" primary="false" unique="false" type="BTREE">
             <column key="createdby" length="" collation="A" null="false"/>
             <column key="deleted" length="" collation="A" null="false"/>
-            <column key="published" length="" collation="A" null="false"/>
+        </index>
+        <index alias="new" name="new" primary="false" unique="false" type="BTREE">
+            <column key="thread" length="" collation="A" null="false"/>
+            <column key="createdon" length="" collation="A" null="false"/>
+            <column key="createdby" length="" collation="A" null="false"/>
         </index>
 
         <aggregate alias="User" class="modUser" local="createdby" foreign="id" cardinality="one" owner="foreign"/>
@@ -371,6 +379,20 @@
         <index alias="owner" name="owner" primary="false" unique="false" type="BTREE">
             <column key="owner" length="" collation="A" null="false"/>
         </index>
+    </object>
+
+
+    <object class="comView" table="app_community_views" extends="xPDOObject">
+        <field key="topic_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" index="pk"/>
+        <field key="user_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" index="pk"/>
+        <field key="timestamp" dbtype="datetime" phptype="datetime" null="false"/>
+
+        <index alias="PRIMARY" name="PRIMARY" primary="true" unique="true" type="BTREE">
+            <column key="topic_id" length="" collation="A" null="false"/>
+            <column key="user_id" length="" collation="A" null="false"/>
+        </index>
+
+        <aggregate alias="Topic" class="comTopic" local="parent" foreign="id" cardinality="one" owner="foreign"/>
     </object>
 
 </model>

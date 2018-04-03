@@ -17,6 +17,7 @@ $xpdo_meta_map = array (
     4 => 'comTotal',
     5 => 'comAuthor',
     6 => 'comStar',
+    7 => 'comView',
   ),
   'modResource' => 
   array (

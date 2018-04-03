@@ -129,6 +129,7 @@ class AppGetListProcessor extends modObjectGetListProcessor
         $data['results'] = [];
         $tstart = microtime(true);
         if ($c->prepare() && $c->stmt->execute()) {
+            //$this->modx->log(modX::LOG_LEVEL_ERROR, $c->toSQL());
             $this->modx->queryTime += microtime(true) - $tstart;
             $this->modx->executedQueries++;
             $data['results'] = $c->stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -217,8 +218,7 @@ class AppGetListProcessor extends modObjectGetListProcessor
             );
         }
 
-        if ($this->getPages) {
-            $limit = $this->getProperty('limit');
+        if ($this->getPages && $limit = $this->getProperty('limit')) {
             $paginator = new Paginator($count, $limit, $this->_page, '?page=(:num)');
             $output['pages'] = $paginator->getPages();
         }

@@ -1,7 +1,7 @@
 {foreach $results as $item}
     <div class="comment-row">
         <div class="comment-wrapper">
-            <div class="comment-meta d-flex flex-wrap no-gutters align-items-center">
+            <div class="comment-meta d-flex flex-wrap no-gutters align-items-center item-data" data-id="{$item.id}" data-type="comment">
                 <div class="col-12 col-md-6 d-flex align-items-center justify-content-center justify-content-md-start">
                     {if !$user}
                         <div class="avatar">
@@ -29,15 +29,15 @@
                                 <i class="far fa-hashtag"></i>
                             </a>
                         </div>
-                        <div class="star ml-3">
-                            <a href="#">
-                                <i class="far fa-star"></i>
-                            </a>
-                        </div>
+                        {if $_modx->user.id}
+                            <div class="star ml-3{if $item.star} active{/if}">
+                                <a href="#" class="placeholder"></a>
+                            </div>
+                        {/if}
                     </div>
                     <div class="ml-md-5">
                         <div class="rating">
-                            <i class="far fa-arrow-up"></i>
+                            <i class="far fa-arrow-up mr-2"></i>
                             {if $item.rating > 0}
                                 <span class="text-success">+{$item.rating}</span>
                             {elseif $item.rating < 0}
@@ -45,7 +45,7 @@
                             {else}
                                 <span>{$item.rating}</span>
                             {/if}
-                            <i class="far fa-arrow-down"></i>
+                            <i class="far fa-arrow-down ml-2"></i>
                         </div>
                     </div>
                 </div>

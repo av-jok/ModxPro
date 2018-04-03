@@ -353,7 +353,7 @@ class AppRouter
         $c->innerJoin('modUserProfile', 'UserProfile');
         $c->innerJoin('comTotal', 'Total');
         $c->select($this->modx->getSelectColumns('modResource', 'Section', 'section_', ['pagetitle', 'context_key', 'uri']));
-        $c->select($this->modx->getSelectColumns('comTopic', 'comTopic', '', ['id', 'pagetitle', 'content', 'published', 'createdby', 'publishedon']));
+        $c->select($this->modx->getSelectColumns('comTopic', 'comTopic', '', ['id', 'pagetitle', 'content', 'published', 'createdby', 'createdon']));
         $c->select($this->modx->getSelectColumns('comTotal', 'Total', '', ['comments', 'views', 'stars', 'rating', 'rating_plus', 'rating_minus']));
         $c->select($this->modx->getSelectColumns('modUserProfile', 'UserProfile', '', ['photo', 'email', 'fullname']));
         if ($c->prepare() && $c->stmt->execute()) {
@@ -383,8 +383,31 @@ class AppRouter
             $this->modx->resource->set('content', $this->pdoTools->getChunk('@FILE chunks/topics/unpublished.tpl', $topic));
         } else {
             $this->modx->resource->set('is_topic', true);
+            if ($this->modx->user->id) {
+                $topic['star'] = $this->modx->getCount('comStar', [
+                    'class' => 'comTopic',
+                    'id' => $topic['id'],
+                    'createdby' => $this->modx->user->id,
+                ]);
+            } else {
+                $topic['star'] = false;
+            }
             $this->modx->resource->set('pagetitle', $topic['pagetitle']);
             $this->modx->resource->set('content', $this->pdoTools->getChunk('@FILE chunks/topics/topic.tpl', $topic));
+            // Save view
+            if ($this->modx->user->id) {
+                $key = [
+                    'user_id' => $this->modx->user->id,
+                    'topic_id' => $topic['id'],
+                ];
+                if (!$view = $this->modx->getObject('comView', $key)) {
+                    /** @var comView $view */
+                    $view = $this->modx->newObject('comView');
+                    $view->fromArray($key, '', true, true);
+                }
+                $view->set('timestamp', date('Y-m-d H:i:s'));
+                $view->save();
+            }
         }
         $this->modx->request->prepareResponse();
     }

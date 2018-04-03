@@ -1,44 +1,36 @@
+{var $active = $.cookie['online-tabs'] ?: 'comments'}
+{var $res = $.App->runProcessor('community/online/' ~ $active, ['limit' => 10])}
 <ul class="nav nav-tabs" id="online-tabs">
     <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#tab-home" role="tab">
+        <a class="nav-link{if $active == 'comments'} active{/if}" data-toggle="tab" href="#tab-comments">
             {$.en ? 'Comments' : 'Комментарии'}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tab-topics" role="tab">
+        <a class="nav-link{if $active == 'topics'} active{/if}" data-toggle="tab" href="#tab-topics">
             {$.en ? 'Topics' : 'Заметки'}
         </a>
-    </li><li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tab-job" role="tab">
+    </li>
+    <li class="nav-item">
+        <a class="nav-link{if $active == 'jobs'} active{/if}" data-toggle="tab" href="#tab-jobs">
             {$.en ? 'Job' : 'Работа'}
         </a>
     </li>
 </ul>
 <div class="tab-content mt-3" id="online-content">
-    <div class="tab-pane fade show active" id="tab-home">
-        {var $res = $.App->runProcessor('community/comment/getlatest', [
-            'limit' => 10,
-        ])}
-        <div class="comments-latest">
+    <div class="comments-latest tab-pane fade{if $active == 'comments'} show active{/if}" id="tab-comments">
+        {if $active == 'comments'}
             {$res.results}
-        </div>
+        {/if}
     </div>
-    <div class="tab-pane fade" id="tab-topics">
-        {var $res = $.App->runProcessor('community/topic/getlatest', [
-            'limit' => 10,
-            'where' => ['Section.alias:NOT IN' => ['work']],
-        ])}
-        <div class="topics-latest">
+    <div class="topics-latest tab-pane fade{if $active == 'topics'} show active{/if}" id="tab-topics">
+        {if $active == 'topics'}
             {$res.results}
-        </div>
+        {/if}
     </div>
-    <div class="tab-pane fade" id="tab-job">
-        {var $res = $.App->runProcessor('community/topic/getlatest', [
-            'limit' => 10,
-            'where' => ['Section.alias' => 'work'],
-        ])}
-        <div class="topics-latest">
+    <div class="topics-latest tab-pane fade{if $active == 'jobs'} show active{/if}" id="tab-jobs">
+        {if $active == 'jobs'}
             {$res.results}
-        </div>
+        {/if}
     </div>
 </div>

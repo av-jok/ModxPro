@@ -36,6 +36,21 @@
   .rating {
     span[class] { font-weight: bold; }
   }
+  .comments, .star {
+    a { color: $gray-dark; }
+  }
+  .star {
+    div::before {
+      font-family: 'Font Awesome 5 Regular';
+      content: '\f005';
+      display: none;
+    }
+    &.active {
+      div::before {
+        font-family: 'Font Awesome 5 Solid';
+      }
+    }
+  }
 }
 
 #topic-page {
@@ -77,21 +92,53 @@
 .comments-list {
   .comment-row {
     max-width: 100%;
-    overflow: auto;
     margin-top: 50px;
+    &.author {
+      .comment-meta {
+        background: #f5fbe5
+      }
+    }
+    &.unseen {
+      .comment-meta {
+        background: #e7f3ff;
+      }
+    }
+    &.deleted {
+      .comment-text {
+        background: #fcf8e3;
+        border-color: #faebcc;
+        color: #8a6d3b;
+      }
+    }
     &:first-child {
       margin-top: 0;
     }
     .comment-meta {
+      @include media-breakpoint-up(md) {
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+      }
       .created {
-        .date {font-size: 12px;}
         .author {
           a { color: $gray-dark; }
           font-weight: bold;
         }
+        .date {font-size: 12px;}
       }
       .rating {
         span[class] { font-weight: bold; }
+      }
+      .star {
+        a::before {
+          font-family: 'Font Awesome 5 Regular';
+          content: '\f005';
+          display: none;
+        }
+        &.active {
+          a::before {
+            font-family: 'Font Awesome 5 Solid';
+          }
+        }
       }
     }
     .comment-text {
@@ -116,11 +163,60 @@
     }
     .avatar {
       img {
-        height: 40px;
-        border-radius: 20px;
+        border-radius: 100px;
       }
     }
   }
+  &.thread {
+    overflow: hidden;
+    margin-top: 30px;
+    .comment-row {
+      margin-top: 15px;
+      .comment-wrapper {
+        position: relative;
+      }
+      &:hover > .comment-wrapper > .comment-dot-wrapper {
+        display: block;
+      }
+      .comment-dot-wrapper {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 1px;
+        .comment-dot {
+          width: 1024px;
+          height: 50px;
+          right: 1px;
+          top: 12px;
+          position: absolute;
+          background: url(/assets/components/modxpro/img/dot.png) repeat-x 100% 0;
+          background-size: 25px;
+        }
+      }
+      .comment-meta {
+        .created {
+          .author {
+            line-height: 12px;
+            font-weight: bold;
+            font-size: 12px;
+          }
+          .date {
+            font-size: 10px;
+            line-height: 12px
+          }
+        }
+        .rating {
+          span[class] { font-weight: bold; }
+        }
+      }
+    }
+  }
+}
+
+ul.comments-list {
+  padding-left: 25px;
 }
 
 .comments-latest, .topics-latest {

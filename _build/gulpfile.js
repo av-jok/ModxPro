@@ -1,14 +1,14 @@
 'use strict';
 
-const gulp = require('gulp'),
+var gulp = require('gulp'),
     sass = require('gulp-sass'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
     cssmin = require('gulp-clean-css'),
     chmod = require('gulp-chmod'),
     concat = require('gulp-concat');
-const build = './assets/';
-const assets = '../../../assets/components/modxpro/';
+var build = './assets/';
+var assets = '../../../assets/components/modxpro/';
 
 gulp.task('default', ['css', 'js']);
 
@@ -30,11 +30,9 @@ gulp.task('js', function () {
     var src = build + 'js/*.js';
     var dst = assets + 'js/web/';
     gulp.src(src)
-        /*
         .pipe(uglify().on('error', function (e) {
             console.log(e);
         }))
-        */
         .pipe(gulp.dest(dst));
 
     src = build + 'js/app/*.js';
@@ -127,32 +125,3 @@ gulp.task('copy', function () {
 
     gulp.src('./node_modules/fancybox/dist/img/**').pipe(gulp.dest(assets + 'img/fancybox/'))
 });
-
-
-/*
-var concatCss = require('gulp-concat-css');
-var browserSync = require('browser-sync');
-
-gulp.task('serve', ['less'], function() {
-
-    browserSync.init({
-        server: "./src",
-        notify: false
-    });
-
-    gulp.watch("src/less/*.less", ['less']);
-    gulp.watch("src/*.html").on('change', browserSync.reload);
-    gulp.watch("src/css/*.css").on('change', browserSync.reload);
-});
-
-gulp.task('less', function () {
-    return gulp.src('src/less/*.less')
-        .pipe(less())
-        .pipe(concatCss("style.css"))
-        .pipe(cssmin({compatibility: 'ie8'}))
-        .pipe(gulp.dest('src/css'))
-        .pipe(browserSync.stream());
-});
-
-gulp.task('default', ['serve']);
-*/

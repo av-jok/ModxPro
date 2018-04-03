@@ -10,6 +10,7 @@ define('app', [
      * @property Profile
      * @property Users
      * @property User
+     * @property Community
      */
     var App = {
         action_url: '/assets/components/modxpro/action.php',
@@ -66,7 +67,7 @@ define('app', [
                 }
             },
 
-            formatNumber: function(number, format) {
+            formatNumber: function (number, format) {
                 Numeral.localeData().delimiters.thousands = ' ';
 
                 return Numeral(number).format(format || '0,0[.]0');
@@ -230,6 +231,30 @@ define('app', [
             },
         },
 
+        Sidebar: {
+            initialize: function () {
+                var $sidebar = $('#sidebar');
+                var $online = $('#online-tabs');
+
+                $online.on('show.bs.tab', function (e) {
+                    var $link = $(e.target);
+                    var $parent = $link.parents('.nav');
+                    if ($parent.length) {
+                        var id = $parent.attr('id');
+                        if (id !== '') {
+                            var href = $link.attr('href');
+                            var tab = href.substr(5);
+                            Cookies.set($parent.attr('id'), tab, {expires: 7, path: '/'});
+
+                            App.Utils.request('community/online/' + tab, function (res) {
+                                $(href).html(res['results']);
+                            });
+                        }
+                    }
+                });
+            }
+        },
+
         init: function () {
             $.ajaxSetup({
                 headers: {
@@ -338,6 +363,8 @@ define('app', [
                 }
             });
             */
+
+            App.Sidebar.initialize();
 
             // Lexicon
             $.post(App.action_url, {action: 'lexicon/get'}, function (res) {

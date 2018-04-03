@@ -17,7 +17,7 @@
                     {$_modx->resource.content}
                 {/block}
             </div>
-            <div class="sidebar col-12 mt-5 col-md-4 pl-md-3 mt-md-0">
+            <div id="sidebar" class="sidebar col-12 mt-5 col-md-4 pl-md-3 mt-md-0">
                 {block 'sidebar'}
                     <form method="get" action="/search" class="mb-5">
                         <div class="input-group">

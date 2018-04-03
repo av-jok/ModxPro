@@ -21,7 +21,6 @@ class CommentGetListProcessor extends AppGetListProcessor
     public function prepareQueryBeforeCount(xPDOQuery $c)
     {
         $where = [
-            $this->classKey . '.published' => true,
             $this->classKey . '.deleted' => false,
         ];
 
@@ -102,7 +101,10 @@ class CommentGetListProcessor extends AppGetListProcessor
         $c->leftJoin('comSection', 'Section', 'Section.id = Topic.parent');
         $c->leftJoin('modUser', 'User');
         $c->leftJoin('modUserProfile', 'UserProfile');
-
+        if ($this->modx->user->id) {
+            $c->leftJoin('comStar', 'Star', 'Star.id = comComment.id AND Star.class = "comComment" AND Star.createdby = ' . $this->modx->user->id);
+            $c->select('Star.id as star');
+        }
         $c->select('comComment.id, comComment.text, comComment.createdon, comComment.createdby, comComment.rating, comComment.rating_plus, comComment.rating_minus, comComment.thread');
         $c->select('Thread.topic, Thread.comments');
         $c->select('User.username');

@@ -30,6 +30,8 @@
 {('/assets/components/modxpro/js/web/config.js?v=' ~ $.assets_version) | jsToHead : false}
 {if !$_modx->isAuthenticated()}
     {'<script type="text/javascript">requirejs(["app/auth"]);</script>' | htmlToBottom}
+{else}
+    {'<script type="text/javascript">requirejs(["app/community"]);</script>' | htmlToBottom}
 {/if}
 {if $_modx->isMember('Administrator')}
     {'<script type="text/javascript">requirejs(["app/adminpanel"]);</script>' | htmlToBottom}

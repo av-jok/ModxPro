@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @property int id
+ * @property int createdby
+ */
 class comTopic extends xPDOSimpleObject
 {
 

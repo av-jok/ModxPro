@@ -80,6 +80,12 @@ class TopicGetListProcessor extends AppGetListProcessor
         if (!$this->getProperty('fastMode')) {
             $c->leftJoin('modUser', 'User');
             $c->leftJoin('modUserProfile', 'UserProfile');
+            if ($this->modx->user->id) {
+                $c->leftJoin('comThread', 'Thread');
+                $c->select('Thread.id as thread');
+                $c->leftJoin('comStar', 'Star', 'Star.id = comTopic.id AND Star.class = "comTopic" AND Star.createdby = ' . $this->modx->user->id);
+                $c->select('Star.id as star');
+            }
 
             $c->select('Total.comments, Total.views, Total.stars, Total.rating, Total.rating_plus, Total.rating_minus');
             $c->select('User.username');
@@ -88,6 +94,32 @@ class TopicGetListProcessor extends AppGetListProcessor
 
         return $c;
     }
+
+
+    /**
+     * @param array $array
+     *
+     * @return array
+     */
+    public function prepareArray(array $array)
+    {
+        if (!$this->getProperty('fastMode') && $this->modx->user->id) {
+            /** @var comView $view */
+            $view = $this->modx->getObject('comView', ['topic_id' => $array['id'], 'user_id' => $this->modx->user->id]);
+            if ($view && !empty($array['thread'])) {
+                $array['new_comments'] = $this->modx->getCount('comComment', [
+                    'thread' => $array['thread'],
+                    'createdon:>' => $view->timestamp,
+                    'createdby:!=' => $this->modx->user->id,
+                ]);
+            }
+        } else {
+            $array['new'] = 0;
+        }
+
+        return $array;
+    }
+
 }
 
 return 'TopicGetListProcessor';

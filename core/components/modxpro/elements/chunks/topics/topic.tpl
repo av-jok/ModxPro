@@ -28,6 +28,11 @@
     {include 'file:chunks/topics/_meta.tpl' item=$_pls user=$user}
 
     <div class="topic-comments">
-        <h2>{$.en ? 'There will be comments' : 'Здесь будут комментарии'}</h2>
+        {var $res = $.App->runProcessor('community/comment/getcomments', [
+            'topic' => $id,
+            'limit' => 0,
+        ])}
+
+        {$res.results}
     </div>
 </div>

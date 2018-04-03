@@ -8,7 +8,7 @@ class App
     public $pdoTools;
     public $config = [];
 
-    const assets_version = '1.13-dev';
+    const assets_version = '1.15-dev';
 
 
     /**

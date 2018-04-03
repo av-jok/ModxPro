@@ -37,7 +37,6 @@ class CommentGetLatestProcessor extends AppGetListProcessor
         ]);
 
         $where = [
-            $this->classKey . '.published' => true,
             $this->classKey . '.deleted' => false,
             'id:IN' => [],
         ];

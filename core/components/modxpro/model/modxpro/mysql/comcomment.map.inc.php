@@ -22,7 +22,6 @@ $xpdo_meta_map['comComment']= array (
     'createdby' => NULL,
     'editedon' => NULL,
     'editedby' => NULL,
-    'published' => NULL,
     'deleted' => 0,
     'deletedon' => NULL,
     'deletedby' => NULL,
@@ -119,13 +118,6 @@ $xpdo_meta_map['comComment']= array (
       'attributes' => 'unsigned',
       'null' => false,
     ),
-    'published' => 
-    array (
-      'dbtype' => 'tinyint',
-      'precision' => '1',
-      'phptype' => 'boolean',
-      'null' => false,
-    ),
     'deleted' => 
     array (
       'dbtype' => 'tinyint',
@@ -213,18 +205,6 @@ $xpdo_meta_map['comComment']= array (
           'collation' => 'A',
           'null' => false,
         ),
-        'deleted' => 
-        array (
-          'length' => '',
-          'collation' => 'A',
-          'null' => false,
-        ),
-        'published' => 
-        array (
-          'length' => '',
-          'collation' => 'A',
-          'null' => false,
-        ),
       ),
     ),
     'user' => 
@@ -247,7 +227,29 @@ $xpdo_meta_map['comComment']= array (
           'collation' => 'A',
           'null' => false,
         ),
-        'published' => 
+      ),
+    ),
+    'new' => 
+    array (
+      'alias' => 'new',
+      'primary' => false,
+      'unique' => false,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'thread' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+        'createdon' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+        'createdby' => 
         array (
           'length' => '',
           'collation' => 'A',
